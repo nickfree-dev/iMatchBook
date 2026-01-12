@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: imatchbook-backend
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=imatchbook_db
+      - DB_USER=user
+      - DB_PASS=userpassword
+
+  db:
+    image: mysql:8.0
+    container_name: imatchbook-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: imatchbook_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # Initialize DB from schema
+      - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:

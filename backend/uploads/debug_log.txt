@@ -1,0 +1,545 @@
+[2026-01-04 03:58:56] Request received.
+[2026-01-04 03:58:56] Vendor autoload successful.
+[2026-01-04 03:58:56] Starting AI processing...
+[2026-01-04 03:58:56] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 03:58:56] Initializing Client...
+[2026-01-04 17:23:37] Request received.
+[2026-01-04 17:23:37] Vendor autoload successful.
+[2026-01-04 17:23:37] Starting AI processing...
+[2026-01-04 17:23:37] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 17:23:37] Initializing Client...
+[2026-01-04 17:56:19] Request received.
+[2026-01-04 17:56:19] Vendor autoload successful.
+[2026-01-04 17:56:19] Starting AI processing...
+[2026-01-04 17:56:19] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 17:56:19] Initializing Client...
+[2026-01-04 17:56:22] Client initialized.
+[2026-01-04 17:56:22] Processor name: projects/imatchbook-app/locations/us/processors/a3193f547de9df24
+[2026-01-04 17:56:22] Reading image file: ../uploads/e1f59524ce5e0159f8b2375a654829f8.jpg
+[2026-01-04 17:56:28] Sending request to Google...
+[2026-01-04 17:56:32] AI/Exception Error: {
+    "reason": "BILLING_DISABLED",
+    "domain": "googleapis.com",
+    "errorInfoMetadata": {
+        "service": "documentai.googleapis.com",
+        "containerInfo": "imatchbook-app",
+        "consumer": "projects\/imatchbook-app"
+    },
+    "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": [
+        {
+            "@type": "pc-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "pcx-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "google.rpc.errorinfo-bin",
+            "reason": "BILLING_DISABLED",
+            "domain": "googleapis.com",
+            "metadata": {
+                "service": "documentai.googleapis.com",
+                "containerInfo": "imatchbook-app",
+                "consumer": "projects\/imatchbook-app"
+            }
+        },
+        {
+            "@type": "google.rpc.help-bin",
+            "links": [
+                {
+                    "description": "Google developers console billing",
+                    "url": "https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app"
+                }
+            ]
+        },
+        {
+            "@type": "google.rpc.localizedmessage-bin",
+            "locale": "en-US",
+            "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."
+        },
+        {
+            "@type": "grpc-status-details-bin",
+            "data": "<Unknown Binary Data>"
+        }
+    ]
+}
+[2026-01-04 17:56:32] Saving to database...
+[2026-01-04 17:59:27] Request received.
+[2026-01-04 17:59:27] Vendor autoload successful.
+[2026-01-04 17:59:27] Starting AI processing...
+[2026-01-04 17:59:27] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 17:59:27] Initializing Client...
+[2026-01-04 17:59:28] Client initialized.
+[2026-01-04 17:59:28] Processor name: projects/imatchbook-app/locations/us/processors/a3193f547de9df24
+[2026-01-04 17:59:28] Reading image file: ../uploads/3966c3ad49b5fd47d74ba2ce59fc68f3.jpg
+[2026-01-04 17:59:29] Sending request to Google...
+[2026-01-04 17:59:31] AI/Exception Error: {
+    "reason": "BILLING_DISABLED",
+    "domain": "googleapis.com",
+    "errorInfoMetadata": {
+        "service": "documentai.googleapis.com",
+        "containerInfo": "imatchbook-app",
+        "consumer": "projects\/imatchbook-app"
+    },
+    "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": [
+        {
+            "@type": "pc-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "pcx-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "google.rpc.errorinfo-bin",
+            "reason": "BILLING_DISABLED",
+            "domain": "googleapis.com",
+            "metadata": {
+                "service": "documentai.googleapis.com",
+                "containerInfo": "imatchbook-app",
+                "consumer": "projects\/imatchbook-app"
+            }
+        },
+        {
+            "@type": "google.rpc.help-bin",
+            "links": [
+                {
+                    "description": "Google developers console billing",
+                    "url": "https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app"
+                }
+            ]
+        },
+        {
+            "@type": "google.rpc.localizedmessage-bin",
+            "locale": "en-US",
+            "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."
+        },
+        {
+            "@type": "grpc-status-details-bin",
+            "data": "<Unknown Binary Data>"
+        }
+    ]
+}
+[2026-01-04 17:59:31] Saving to database...
+[2026-01-04 18:02:17] Request received.
+[2026-01-04 18:02:17] Vendor autoload successful.
+[2026-01-04 18:02:17] Starting AI processing...
+[2026-01-04 18:02:17] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 18:02:17] Initializing Client...
+[2026-01-04 18:02:18] Client initialized.
+[2026-01-04 18:02:18] Processor name: projects/imatchbook-app/locations/us/processors/a3193f547de9df24
+[2026-01-04 18:02:18] Reading image file: ../uploads/eb31ddd30da5ab7dd89e5d0f360fa33a.jpg
+[2026-01-04 18:02:19] Sending request to Google...
+[2026-01-04 18:02:21] AI/Exception Error: {
+    "reason": "BILLING_DISABLED",
+    "domain": "googleapis.com",
+    "errorInfoMetadata": {
+        "service": "documentai.googleapis.com",
+        "consumer": "projects\/imatchbook-app",
+        "containerInfo": "imatchbook-app"
+    },
+    "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": [
+        {
+            "@type": "pc-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "pcx-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "google.rpc.errorinfo-bin",
+            "reason": "BILLING_DISABLED",
+            "domain": "googleapis.com",
+            "metadata": {
+                "service": "documentai.googleapis.com",
+                "consumer": "projects\/imatchbook-app",
+                "containerInfo": "imatchbook-app"
+            }
+        },
+        {
+            "@type": "google.rpc.help-bin",
+            "links": [
+                {
+                    "description": "Google developers console billing",
+                    "url": "https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app"
+                }
+            ]
+        },
+        {
+            "@type": "google.rpc.localizedmessage-bin",
+            "locale": "en-US",
+            "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."
+        },
+        {
+            "@type": "grpc-status-details-bin",
+            "data": "<Unknown Binary Data>"
+        }
+    ]
+}
+[2026-01-04 18:02:21] Saving to database...
+[2026-01-04 18:14:27] Request received.
+[2026-01-04 18:14:28] Vendor autoload successful.
+[2026-01-04 18:14:28] Starting AI processing...
+[2026-01-04 18:14:28] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 18:14:28] Initializing Client...
+[2026-01-04 18:14:28] Client initialized.
+[2026-01-04 18:14:28] Processor name: projects/imatchbook-app/locations/us/processors/a3193f547de9df24
+[2026-01-04 18:14:28] Reading image file: ../uploads/6433b3dc841f7a04a00d50d950cdfa99.jpg
+[2026-01-04 18:14:29] Sending request to Google...
+[2026-01-04 18:14:32] AI/Exception Error: {
+    "reason": "BILLING_DISABLED",
+    "domain": "googleapis.com",
+    "errorInfoMetadata": {
+        "service": "documentai.googleapis.com",
+        "consumer": "projects\/imatchbook-app",
+        "containerInfo": "imatchbook-app"
+    },
+    "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": [
+        {
+            "@type": "pc-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "pcx-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "google.rpc.errorinfo-bin",
+            "reason": "BILLING_DISABLED",
+            "domain": "googleapis.com",
+            "metadata": {
+                "service": "documentai.googleapis.com",
+                "consumer": "projects\/imatchbook-app",
+                "containerInfo": "imatchbook-app"
+            }
+        },
+        {
+            "@type": "google.rpc.help-bin",
+            "links": [
+                {
+                    "description": "Google developers console billing",
+                    "url": "https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app"
+                }
+            ]
+        },
+        {
+            "@type": "google.rpc.localizedmessage-bin",
+            "locale": "en-US",
+            "message": "This API method requires billing to be enabled. Please enable billing on project #imatchbook-app by visiting https:\/\/console.developers.google.com\/billing\/enable?project=imatchbook-app then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."
+        },
+        {
+            "@type": "grpc-status-details-bin",
+            "data": "<Unknown Binary Data>"
+        }
+    ]
+}
+[2026-01-04 18:14:32] Saving to database...
+[2026-01-04 18:15:03] Request received.
+[2026-01-04 18:15:04] Vendor autoload successful.
+[2026-01-04 18:15:04] Starting AI processing...
+[2026-01-04 18:15:04] Key file path: /var/www/html/backend/api/../imatchbook-app-key.json
+[2026-01-04 18:15:04] Initializing Client...
+[2026-01-04 18:15:04] Client initialized.
+[2026-01-04 18:15:04] Processor name: projects/imatchbook-app/locations/us/processors/a3193f547de9df24
+[2026-01-04 18:15:04] Reading image file: ../uploads/4d67623ab1620c582292fd8d3733c5cd.jpg
+[2026-01-04 18:15:05] Sending request to Google...
+[2026-01-06 00:48:39] Request received.
+[2026-01-06 00:48:39] Vendor autoload successful.
+[2026-01-06 00:48:39] Starting AI processing...
+[2026-01-06 00:48:39] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 00:48:39] Initializing Client...
+[2026-01-06 00:48:41] Client initialized.
+[2026-01-06 00:48:41] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 00:48:41] Reading image file: ../uploads/2e1f221b62fdc0d05dc6c76888b7b043.jpg
+[2026-01-06 00:48:43] Sending request to Google...
+[2026-01-06 00:48:51] Response received from Google.
+[2026-01-06 00:48:51] Entity found: Type=[purchase_time], Text=[10:11AM], Confidence=[0.97926932573318]
+[2026-01-06 00:48:51] Entity found: Type=[total_amount], Text=[107.95], Confidence=[0.79678082466125]
+[2026-01-06 00:48:51] Entity found: Type=[payment_type], Text=[Visa Credit], Confidence=[0.67422467470169]
+[2026-01-06 00:48:52] Entity found: Type=[supplier_address], Text=[1601 WESTSIDE DRIVE
+ROLLA,], Confidence=[0.64395612478256]
+[2026-01-06 00:48:52] Entity found: Type=[receipt_date], Text=[12/28/25], Confidence=[0.64110261201859]
+[2026-01-06 00:48:52] Entity found: Type=[supplier_name], Text=[], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[credit_card_last_four_digits], Text=[3085], Confidence=[3.1801707558107E-30]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[4.98], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[22.16], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[11.12], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[8], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[25.20 3 ' 80C], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[35.94], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[99.40], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[line_item], Text=[8.55], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[currency], Text=[], Confidence=[1]
+[2026-01-06 00:48:52] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 00:48:52] AI processing complete. Found: Merchant=, Date=2025-12-28, Total=107.95
+[2026-01-06 00:48:52] Saving to database...
+[2026-01-06 01:15:31] Request received.
+[2026-01-06 01:15:31] Vendor autoload successful.
+[2026-01-06 01:15:32] Starting AI processing...
+[2026-01-06 01:15:32] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 01:15:32] Initializing Client...
+[2026-01-06 01:15:34] Client initialized.
+[2026-01-06 01:15:34] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 01:15:34] Reading image file: ../uploads/3a48c9ac7e1ca5858fe1eb36135db974.jpg
+[2026-01-06 01:15:39] Sending request to Google...
+[2026-01-06 01:15:44] Response received from Google.
+[2026-01-06 01:15:44] Entity found: Type=[purchase_time], Text=[10:11AM], Confidence=[0.97627848386765]
+[2026-01-06 01:15:44] Entity found: Type=[total_amount], Text=[107.95], Confidence=[0.79800909757614]
+[2026-01-06 01:15:44] Entity found: Type=[payment_type], Text=[Visa Credit], Confidence=[0.67265874147415]
+[2026-01-06 01:15:44] Entity found: Type=[supplier_address], Text=[1601 WESTSIDE DRIVE
+ROLLA,], Confidence=[0.64410865306854]
+[2026-01-06 01:15:44] Entity found: Type=[receipt_date], Text=[12/28/25], Confidence=[0.64148962497711]
+[2026-01-06 01:15:44] Entity found: Type=[supplier_name], Text=[], Confidence=[1]
+[2026-01-06 01:15:44] Entity found: Type=[credit_card_last_four_digits], Text=[3085], Confidence=[2.5122504270068E-27]
+[2026-01-06 01:15:44] Entity found: Type=[line_item], Text=[4.98], Confidence=[1]
+[2026-01-06 01:15:44] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 01:15:44] Entity found: Type=[line_item], Text=[22.16], Confidence=[1]
+[2026-01-06 01:15:44] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[11.12], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[8], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[25.20 3 ' 80C], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[2], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[35.94], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[99.40], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[line_item], Text=[8.55], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[currency], Text=[], Confidence=[1]
+[2026-01-06 01:15:45] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 01:15:45] AI processing complete. Found: Merchant=, Date=2025-12-28, Total=107.95
+[2026-01-06 01:15:45] Saving to database...
+[2026-01-06 01:15:45] Found 1 potential matches in bank transactions.
+[2026-01-06 01:16:42] Request received.
+[2026-01-06 01:16:42] Vendor autoload successful.
+[2026-01-06 01:16:43] Duplicate file detected. Hash: d4ca36fe2b6beda360e00859e1dd7ea7
+[2026-01-06 01:25:04] Request received.
+[2026-01-06 01:25:04] Vendor autoload successful.
+[2026-01-06 01:25:05] Duplicate file detected. Hash: d4ca36fe2b6beda360e00859e1dd7ea7
+[2026-01-06 01:30:35] Request received.
+[2026-01-06 01:30:35] Vendor autoload successful.
+[2026-01-06 01:30:36] Starting AI processing...
+[2026-01-06 01:30:36] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 01:30:36] Initializing Client...
+[2026-01-06 01:30:37] Client initialized.
+[2026-01-06 01:30:37] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 01:30:37] Reading image file: ../uploads/cd8f9cddc3e7d8abac579bab755e00f7.jpg
+[2026-01-06 01:30:39] Sending request to Google...
+[2026-01-06 01:30:45] Response received from Google.
+[2026-01-06 01:30:45] Entity found: Type=[purchase_time], Text=[10:47AM], Confidence=[0.97298586368561]
+[2026-01-06 01:30:45] Entity found: Type=[total_amount], Text=[1.49], Confidence=[0.79252761602402]
+[2026-01-06 01:30:46] Entity found: Type=[receipt_date], Text=[12/28/25], Confidence=[0.73226350545883]
+[2026-01-06 01:30:46] Entity found: Type=[payment_type], Text=[Visa Credit], Confidence=[0.60036283731461]
+[2026-01-06 01:30:46] Entity found: Type=[supplier_address], Text=[1601 WEST], Confidence=[0.45864585042]
+[2026-01-06 01:30:46] Entity found: Type=[supplier_name], Text=[MENARDS - ROLLA], Confidence=[0.43015503883362]
+[2026-01-06 01:30:46] Entity found: Type=[credit_card_last_four_digits], Text=[3085], Confidence=[0]
+[2026-01-06 01:30:46] Entity found: Type=[line_item], Text=[1.49], Confidence=[1]
+[2026-01-06 01:30:46] Entity found: Type=[line_item], Text=[TAX ROLLA-MO 0.13], Confidence=[1]
+[2026-01-06 01:30:46] Entity found: Type=[currency], Text=[], Confidence=[1]
+[2026-01-06 01:30:46] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 01:30:46] AI processing complete. Found: Merchant=MENARDS - ROLLA, Date=2025-12-28, Total=1.49
+[2026-01-06 01:30:46] Saving to database...
+[2026-01-06 01:30:46] Found 0 potential matches in bank transactions.
+[2026-01-06 04:39:09] Request received.
+[2026-01-06 04:39:10] Vendor autoload successful.
+[2026-01-06 04:39:10] Duplicate file detected. Hash: d4ca36fe2b6beda360e00859e1dd7ea7
+[2026-01-06 04:39:34] Request received.
+[2026-01-06 04:39:35] Vendor autoload successful.
+[2026-01-06 04:39:35] Starting AI processing...
+[2026-01-06 04:39:35] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 04:39:35] Initializing Client...
+[2026-01-06 04:39:35] Client initialized.
+[2026-01-06 04:39:36] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 04:39:36] Reading image file: ../uploads/9106294bdcd93570521e0c7f3d051a54.jpg
+[2026-01-06 04:39:37] Sending request to Google...
+[2026-01-06 04:41:31] Request received.
+[2026-01-06 04:41:31] Vendor autoload successful.
+[2026-01-06 04:41:32] Starting AI processing...
+[2026-01-06 04:41:32] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 04:41:32] Initializing Client...
+[2026-01-06 04:41:32] Client initialized.
+[2026-01-06 04:41:32] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 04:41:32] Reading image file: ../uploads/ada7cb2a73cd5eac6d6a4803819ba06d.jpg
+[2026-01-06 04:41:33] Sending request to Google...
+[2026-01-06 04:44:42] AI/Exception Error: Retry total timeout exceeded.
+[2026-01-06 04:44:42] Saving to database...
+[2026-01-06 04:44:54] Request received.
+[2026-01-06 04:44:55] Vendor autoload successful.
+[2026-01-06 04:44:55] Duplicate file detected. Hash: d4ca36fe2b6beda360e00859e1dd7ea7
+[2026-01-06 04:46:40] AI/Exception Error: Retry total timeout exceeded.
+[2026-01-06 04:46:40] Saving to database...
+[2026-01-06 05:12:28] Request received.
+[2026-01-06 05:12:28] Vendor autoload successful.
+[2026-01-06 05:12:28] Duplicate file detected. Hash: 2bd8d9e6f5e0c1e454b7788558c4e244
+[2026-01-06 05:12:59] Request received.
+[2026-01-06 05:12:59] Vendor autoload successful.
+[2026-01-06 05:12:59] Duplicate file detected. Hash: 51553683f34011bf35f16527ecaadabe
+[2026-01-06 05:15:38] Request received.
+[2026-01-06 05:15:38] Vendor autoload successful.
+[2026-01-06 05:15:39] Starting AI processing...
+[2026-01-06 05:15:39] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 05:15:39] Initializing Client...
+[2026-01-06 05:15:39] Client initialized.
+[2026-01-06 05:15:39] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 05:15:39] Reading image file: ../uploads/42b761e077ce8da9a880b7057a8d7946.jpg
+[2026-01-06 05:15:40] Sending request to Google... (SIMULATION MODE: API CALL SKIPPED)
+[2026-01-06 05:15:40] AI processing complete (SIMULATED). Found: Merchant=SIMULATED MERCHANT, Date=2026-01-06, Total=123.45
+[2026-01-06 05:15:40] Saving to database...
+[2026-01-06 05:15:41] Found 0 potential matches in bank transactions.
+[2026-01-06 05:40:12] Request received.
+[2026-01-06 05:40:12] Vendor autoload successful.
+[2026-01-06 05:40:12] Duplicate file detected. Hash: 8607ec0cfc8162ff3c6b04214f87547b
+[2026-01-06 05:40:41] Request received.
+[2026-01-06 05:40:41] Vendor autoload successful.
+[2026-01-06 05:40:42] Starting AI processing...
+[2026-01-06 05:40:42] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 05:40:42] Initializing Client...
+[2026-01-06 05:40:43] Client initialized.
+[2026-01-06 05:40:43] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 05:40:43] Reading image file: ../uploads/d70422f463bd781f6ff391ba311b8538.jpg
+[2026-01-06 05:40:45] Sending request to Google...
+[2026-01-06 05:40:48] AI/Exception Error: {
+    "reason": "PROCESSOR_NOT_ENABLED",
+    "domain": "documentai.googleapis.com",
+    "errorInfoMetadata": {
+        "state": "DISABLED",
+        "processor_id": "5bfcd6c689ac9bc2"
+    },
+    "message": "Processor '5bfcd6c689ac9bc2' is not enabled.",
+    "code": 9,
+    "status": "FAILED_PRECONDITION",
+    "details": [
+        {
+            "@type": "pc-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "pcx-high-bwd-bin",
+            "data": "<Unknown Binary Data>"
+        },
+        {
+            "@type": "google.rpc.errorinfo-bin",
+            "reason": "PROCESSOR_NOT_ENABLED",
+            "domain": "documentai.googleapis.com",
+            "metadata": {
+                "state": "DISABLED",
+                "processor_id": "5bfcd6c689ac9bc2"
+            }
+        },
+        {
+            "@type": "grpc-status-details-bin",
+            "data": "<Unknown Binary Data>"
+        }
+    ]
+}
+[2026-01-06 05:40:48] Saving to database...
+[2026-01-06 05:42:04] Request received.
+[2026-01-06 05:42:04] Vendor autoload successful.
+[2026-01-06 05:42:04] Duplicate file detected. Hash: b7dfc00754c8aca550922f76becb9aa5
+[2026-01-06 05:48:28] Request received.
+[2026-01-06 05:48:28] Vendor autoload successful.
+[2026-01-06 05:48:28] Overwriting duplicate/failed record. Hash: b7dfc00754c8aca550922f76becb9aa5
+[2026-01-06 05:48:28] Starting AI processing...
+[2026-01-06 05:48:28] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 05:48:28] Initializing Client...
+[2026-01-06 05:48:30] Client initialized.
+[2026-01-06 05:48:30] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 05:48:30] Reading image file: ../uploads/e6f799a5a94abbf8270d7cee5436e7ff.jpg
+[2026-01-06 05:48:33] Sending request to Google...
+[2026-01-06 05:48:38] Response received from Google.
+[2026-01-06 05:48:38] Entity found: Type=[net_amount], Text=[550.05], Confidence=[0.99168008565903]
+[2026-01-06 05:48:38] Entity found: Type=[currency], Text=[$], Confidence=[0.92797619104385]
+[2026-01-06 05:48:38] Entity found: Type=[total_tax_amount], Text=[47.30], Confidence=[0.90450751781464]
+[2026-01-06 05:48:38] Entity found: Type=[total_amount], Text=[28.95], Confidence=[0.8167587518692]
+[2026-01-06 05:48:38] Entity found: Type=[purchase_time], Text=[19:59], Confidence=[0.80594062805176]
+[2026-01-06 05:48:38] Entity found: Type=[supplier_address], Text=[2300 NORTH BISHOP AVENUE
+ROLLA, MO 65401], Confidence=[0.58013582229614]
+[2026-01-06 05:48:38] Entity found: Type=[supplier_name], Text=[], Confidence=[1]
+[2026-01-06 05:48:38] Entity found: Type=[supplier_phone], Text=[11-12-], Confidence=[0.16850230097771]
+[2026-01-06 05:48:38] Entity found: Type=[receipt_date], Text=[11/12/25 19:59:13
+], Confidence=[1]
+[2026-01-06 05:48:38] Entity found: Type=[line_item], Text=[AO SMITH 40-GAL GYR NG SH 550.05], Confidence=[1]
+[2026-01-06 05:48:38] Entity found: Type=[line_item], Text=[579.00 DISCOUNT EACH -28.95], Confidence=[1]
+[2026-01-06 05:48:38] Entity found: Type=[line_item], Text=[LCC SYSTEM USE ONLY 0.00], Confidence=[1]
+[2026-01-06 05:48:38] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 05:48:38] AI processing complete. Found: Merchant=, Date=2025-11-12, Total=28.95
+[2026-01-06 05:48:38] Saving to database...
+[2026-01-06 05:48:38] Found 0 potential matches in bank transactions.
+[2026-01-06 05:58:48] Request received.
+[2026-01-06 05:58:48] Vendor autoload successful.
+[2026-01-06 05:58:48] Duplicate file detected. Hash: b7dfc00754c8aca550922f76becb9aa5
+[2026-01-06 05:58:53] Request received.
+[2026-01-06 05:58:54] Vendor autoload successful.
+[2026-01-06 05:58:54] Overwriting duplicate/failed record. Hash: b7dfc00754c8aca550922f76becb9aa5
+[2026-01-06 05:58:54] Starting AI processing...
+[2026-01-06 05:58:54] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 05:58:54] Initializing Client...
+[2026-01-06 05:58:56] Client initialized.
+[2026-01-06 05:58:57] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 05:58:57] Reading image file: ../uploads/2d3560878ca982dce420bf056e78a606.jpg
+[2026-01-06 05:59:00] Sending request to Google...
+[2026-01-06 05:59:06] Response received from Google.
+[2026-01-06 05:59:06] Entity found: Type=[net_amount], Text=[550.05], Confidence=[0.99169582128525]
+[2026-01-06 05:59:06] Entity found: Type=[currency], Text=[$], Confidence=[0.92778092622757]
+[2026-01-06 05:59:06] Entity found: Type=[total_tax_amount], Text=[47.30], Confidence=[0.90510070323944]
+[2026-01-06 05:59:06] Entity found: Type=[total_amount], Text=[28.95], Confidence=[0.8172487616539]
+[2026-01-06 05:59:06] Entity found: Type=[purchase_time], Text=[19:], Confidence=[0.78353041410446]
+[2026-01-06 05:59:06] Entity found: Type=[supplier_address], Text=[2300 NORTH BISHOP AVENUE
+ROLLA, MO 65401], Confidence=[0.57788187265396]
+[2026-01-06 05:59:06] Entity found: Type=[supplier_name], Text=[], Confidence=[1]
+[2026-01-06 05:59:06] Entity found: Type=[supplier_phone], Text=[11-12-], Confidence=[0.17221239209175]
+[2026-01-06 05:59:06] Entity found: Type=[receipt_date], Text=[11/12/25 19:59:13
+], Confidence=[1]
+[2026-01-06 05:59:06] Entity found: Type=[line_item], Text=[AO SMITH 40-GAL GYR NG SH 550.05], Confidence=[1]
+[2026-01-06 05:59:06] Entity found: Type=[line_item], Text=[579.00 DISCOUNT EACH -28.95], Confidence=[1]
+[2026-01-06 05:59:06] Entity found: Type=[line_item], Text=[LCC SYSTEM USE ONLY 0.00], Confidence=[1]
+[2026-01-06 05:59:06] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 05:59:06] AI processing complete. Found: Merchant=, Date=2025-11-12, Total=28.95
+[2026-01-06 05:59:06] Saving to database...
+[2026-01-06 05:59:06] Found 0 potential matches in bank transactions.
+[2026-01-06 06:00:37] Request received.
+[2026-01-06 06:00:37] Vendor autoload successful.
+[2026-01-06 06:00:38] Duplicate file detected. Hash: 8607ec0cfc8162ff3c6b04214f87547b
+[2026-01-06 06:00:41] Request received.
+[2026-01-06 06:00:41] Vendor autoload successful.
+[2026-01-06 06:00:42] Overwriting duplicate/failed record. Hash: 8607ec0cfc8162ff3c6b04214f87547b
+[2026-01-06 06:00:42] Starting AI processing...
+[2026-01-06 06:00:42] Key file path: /var/www/html/backend/api/../imatchbook-app-key-business.json
+[2026-01-06 06:00:42] Initializing Client...
+[2026-01-06 06:00:43] Client initialized.
+[2026-01-06 06:00:43] Processor name: projects/imatchbook-app-483500/locations/us/processors/5bfcd6c689ac9bc2
+[2026-01-06 06:00:43] Reading image file: ../uploads/e8468bc3d2316932eedc67a3a9703381.jpg
+[2026-01-06 06:00:45] Sending request to Google...
+[2026-01-06 06:00:51] Response received from Google.
+[2026-01-06 06:00:51] Entity found: Type=[credit_card_last_four_digits], Text=[3085], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[net_amount], Text=[86.25], Confidence=[0.98693788051605]
+[2026-01-06 06:00:51] Entity found: Type=[total_tax_amount], Text=[7.42], Confidence=[0.91810923814774]
+[2026-01-06 06:00:51] Entity found: Type=[payment_type], Text=[Visa], Confidence=[0.84206175804138]
+[2026-01-06 06:00:51] Entity found: Type=[total_amount], Text=[93.67], Confidence=[0.82385009527206]
+[2026-01-06 06:00:51] Entity found: Type=[supplier_name], Text=[HARBOR FREIGHT], Confidence=[0.74312889575958]
+[2026-01-06 06:00:51] Entity found: Type=[currency], Text=[$], Confidence=[0.73322367668152]
+[2026-01-06 06:00:51] Entity found: Type=[supplier_phone], Text=[(573) 458-9797], Confidence=[0.72211343050003]
+[2026-01-06 06:00:51] Entity found: Type=[supplier_address], Text=[ROLLA MO #02960], Confidence=[0.69803684949875]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[34.99], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[Coupon Discount 35.00], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[49.99], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[Coupon Discount: 10.00], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[68513 HEX SOCKET DRIVER SET 3PC 1.27], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[line_item], Text=[Coupon Discount: 4.72], Confidence=[1]
+[2026-01-06 06:00:51] Entity found: Type=[supplier_city], Text=[], Confidence=[1]
+[2026-01-06 06:00:51] AI processing complete. Found: Merchant=HARBOR FREIGHT, Date=, Total=93.67
+[2026-01-06 06:00:51] Saving to database...
