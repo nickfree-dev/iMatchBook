@@ -1,0 +1,24 @@
+I am starting Phase 2 of the iMatchBook development: Core Bookkeeping Features. 
+Please implement the following architectural and database changes:
+
+1. Database Migrations:
+   - Create a 'properties' table (id, user_id, name, address, type, is_active).
+   - Create a 'categories' table (id, user_id, name, type, schedule_e_line).
+   - Update 'bank_transactions' schema to include: user_id, property_id, category_id, receipt_id, notes, source, and is_reviewed.
+   - Update 'receipts' schema to include: user_id, property_id, category_id, doc_type, and notes.
+
+2. Backend Model Layer:
+   - Create PHP Model classes in 'backend/models/' for Transaction, Document, Property, and Category to handle DB interactions cleanly.
+
+3. API Implementation:
+   - Build CRUD endpoints in 'backend/api/properties/' and 'backend/api/categories/'.
+   - Update 'api/transactions/' to support filtering by property_id and category_id.
+   - Create an 'api/transactions/update.php' endpoint to allow PATCH updates for assigning categories and properties to a specific transaction.
+
+4. Frontend Enhancements:
+   - Update the 'TransactionList' component to include inline dropdowns for assigning Categories and Properties.
+   - Add a "Linked Receipt" indicator (badge) to rows that have a 'receipt_id'.
+   - Implement a filter bar to search transactions by property or category.
+
+Ensure all new endpoints use the existing JWT auth middleware for security.
+
