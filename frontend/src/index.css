@@ -2,4 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles can be added here */
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-200 antialiased;
+  }
+}
+
+/* Utility: very subtle background highlight */
+@layer utilities {
+  .hover\:bg-white\/3:hover { background-color: rgba(255,255,255,0.03); }
+  .bg-white\/3 { background-color: rgba(255,255,255,0.03); }
+  .bg-white\/5 { background-color: rgba(255,255,255,0.05); }
+  .bg-white\/8 { background-color: rgba(255,255,255,0.08); }
+  .border-white\/8 { border-color: rgba(255,255,255,0.08); }
+}

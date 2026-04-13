@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMatchBook — Full App Plan & Roadmap</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent: #0ea5e9;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0891b2;
+            --bg-root: #f1f5f9;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --radius: 14px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-root);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        header {
+            background: linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #0ea5e9 100%);
+            color: white;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+        header .eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.75;
+            margin-bottom: 0.5rem;
+        }
+        header h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 0.6rem; }
+        header p { opacity: 0.9; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        .toc-bar {
+            background: #312e81;
+            padding: 0.75rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .toc-bar a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+        .toc-bar a:hover { color: #fff; }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 2.5rem 0 1.5rem;
+            border-left: 5px solid var(--primary);
+            padding-left: 1rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(79,70,229,0.05);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.6rem;
+            margin-bottom: 1rem;
+            font-size: 1.35rem;
+        }
+        .card h3 {
+            color: var(--text);
+            margin: 1.25rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+        .card p { margin-bottom: 0.75rem; color: var(--text); }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+        .card li { margin-bottom: 0.4rem; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0 1rem;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 0.7rem 0.85rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: var(--text);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8fafc; }
+
+        code {
+            background: #eef2ff;
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            color: var(--primary-dark);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-right: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .tag-fe   { background: #dbeafe; color: #1e40af; }
+        .tag-be   { background: #fef3c7; color: #92400e; }
+        .tag-db   { background: #dcfce7; color: #166534; }
+        .tag-ai   { background: #ede9fe; color: #5b21b6; }
+        .tag-infra { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+        .tag-now  { background: #d1fae5; color: #065f46; }
+        .tag-soon { background: #fef3c7; color: #92400e; }
+        .tag-later { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .status-item {
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .status-complete { border-left: 4px solid var(--success); }
+        .status-pending  { border-left: 4px solid var(--warning); }
+        .status-new      { border-left: 4px solid var(--primary); }
+
+        .page-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.85rem;
+        }
+        .page-card .page-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.3rem;
+        }
+        .page-card .page-route {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            margin-bottom: 0.5rem;
+        }
+        .page-card ul { margin: 0; padding-left: 1.25rem; }
+        .page-card li { font-size: 0.9rem; margin-bottom: 0.2rem; color: var(--text-muted); }
+
+        .todo-list { list-style: none; padding: 0; }
+        .todo-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.92rem;
+        }
+        .todo-list li:last-child { border-bottom: none; }
+        .todo-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .todo-check.done {
+            background: var(--success);
+            border-color: var(--success);
+            position: relative;
+        }
+        .todo-check.done::after {
+            content: '✓';
+            color: white;
+            font-size: 11px;
+            position: absolute;
+            top: -1px;
+            left: 2px;
+            font-weight: bold;
+        }
+        .todo-text.done { text-decoration: line-through; color: var(--text-muted); }
+        .todo-group {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin: 1.25rem 0 0.4rem;
+        }
+
+        .mermaid { margin: 1rem 0; background: #f8fafc; border-radius: 10px; padding: 1rem; overflow: hidden; }
+
+        .callout {
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            border-left: 4px solid;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+        }
+        .callout-info    { background: #e0f2fe; border-color: #0ea5e9; color: #0c4a6e; }
+        .callout-warning { background: #fef9c3; border-color: #eab308; color: #713f12; }
+        .callout-danger  { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+        .callout-success { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+
+        .db-table-block {
+            font-family: monospace;
+            font-size: 0.82rem;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 10px;
+            margin: 0.75rem 0;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        .db-col { color: #7dd3fc; }
+        .db-type { color: #86efac; }
+        .db-comment { color: #94a3b8; }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .two-col, .three-col, .status-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <p class="eyebrow">📖 Full App Plan & Roadmap</p>
+    <h1>iMatchBook</h1>
+    <p>A complete guide to transforming iMatchBook into a full-featured real estate rental bookkeeping platform — architecture, pages, database, and prioritized to-do list.</p>
+</header>
+
+<nav class="toc-bar">
+    <a href="#vision">Vision</a>
+    <a href="#current-state">Current State</a>
+    <a href="#tech-stack">Tech Stack</a>
+    <a href="#frontend-pages">Frontend Pages</a>
+    <a href="#backend-api">Backend API</a>
+    <a href="#database">Database</a>
+    <a href="#auth">Authentication</a>
+    <a href="#pwa">PWA & Offline</a>
+    <a href="#ai">AI Pipeline</a>
+    <a href="#todo">TODO List</a>
+</nav>
+
+<div class="container">
+
+    <!-- ===== VISION ===== -->
+    <h2 class="section-title" id="vision">🎯 Vision & Goal</h2>
+    <div class="card">
+        <h2>What iMatchBook Needs to Become</h2>
+        <p>iMatchBook is evolving from a single-purpose receipt matcher into a <strong>unified real estate rental bookkeeping platform</strong>. Inspired by the best features of Stessa, Landlord Studio, and Baselane, the goal is:</p>
+        <ul>
+            <li>📥 <strong>Import</strong> bank statements (CSV, QIF, OFX) and categorize transactions</li>
+            <li>📸 <strong>Capture & link</strong> receipts and invoices (camera or file upload) with AI-powered OCR</li>
+            <li>🏘️ <strong>Track per-property</strong> income and expenses across a rental portfolio</li>
+            <li>📊 <strong>Generate reports</strong>: P&L, Schedule E, cash flow by property and date range</li>
+            <li>🔒 <strong>Secure multi-user access</strong> with JWT authentication</li>
+            <li>📱 <strong>Work on any device</strong> as an installable PWA with offline capability</li>
+        </ul>
+        <div class="mermaid">
+graph LR
+    A[Bank CSV/QIF] -->|Import| B[(MySQL DB)]
+    C[Receipt Photo/PDF] -->|Upload| D[Google Document AI]
+    D -->|Extracted Data| E[Matching Engine]
+    B --> E
+    E -->|Suggestions| F[Review & Link UI]
+    F -->|Confirmed Match| B
+    B --> G[Reports: P&L / Schedule E]
+    B --> H[Dashboard]
+        </div>
+    </div>
+
+    <!-- ===== CURRENT STATE ===== -->
+    <h2 class="section-title" id="current-state">📸 Current State Audit</h2>
+    <div class="card">
+        <h2>What Is Already Built</h2>
+        <div class="status-grid">
+            <div class="status-item status-complete">
+                <h3 style="color:var(--success)">✅ Working Now</h3>
+                <ul>
+                    <li><strong>BankImport.jsx</strong> — CSV upload UI</li>
+                    <li><strong>import_bank.php</strong> — Dynamic CSV column detection</li>
+                    <li><strong>CameraCapture.jsx</strong> — Camera + file upload for receipts</li>
+                    <li><strong>upload.php</strong> — Full Google Document AI OCR pipeline with line-item extraction</li>
+                    <li><strong>Proximity Matcher</strong> — ±3 day window matching by amount</li>
+                    <li><strong>link_receipt.php</strong> — Links a receipt ID to a transaction</li>
+                    <li><strong>TransactionList.jsx</strong> — Sortable, filterable transaction table</li>
+                    <li><strong>Duplicate Detection</strong> — MD5 hash check on uploads</li>
+                    <li><strong>Docker Compose</strong> — PHP + MySQL dev environment</li>
+                    <li><strong>Vite + React 19 + Tailwind v3</strong> — Modern frontend stack</li>
+                    <li><strong>vite-plugin-pwa</strong> — PWA plugin already installed</li>
+                </ul>
+            </div>
+            <div class="status-item status-pending">
+                <h3 style="color:var(--warning)">⚠️ Gaps / Problems</h3>
+                <ul>
+                    <li>❌ <strong>No authentication</strong> — API is completely open</li>
+                    <li>❌ <strong>No router</strong> — Tab switching with <code>useState</code>, not URL-based</li>
+                    <li>❌ <strong>No properties</strong> — No concept of individual rental units</li>
+                    <li>❌ <strong>No categories</strong> — Transactions have no expense/income type</li>
+                    <li>❌ <strong>No reports</strong> — No P&L, Schedule E, or summaries</li>
+                    <li>❌ <strong>QIF import not implemented</strong></li>
+                    <li>❌ <strong>Models folder is empty</strong> — No refactoring yet</li>
+                    <li>❌ <strong>No multi-format doc import</strong> — Only image receipts & CSV</li>
+                    <li>❌ <strong>Hard-coded localhost URLs</strong> — Not portable</li>
+                    <li>❌ <strong>PWA manifest/service worker</strong> — Plugin installed but not configured</li>
+                    <li>❌ <strong>No receipt/document library</strong> — No browse/search for uploaded docs</li>
+                    <li>❌ <strong>No Dashboard</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TECH STACK ===== -->
+    <h2 class="section-title" id="tech-stack">🏗️ Recommended Tech Stack</h2>
+    <div class="card">
+        <h2>Full Stack Decision Matrix</h2>
+        <table>
+            <tr>
+                <th>Layer</th>
+                <th>Choice</th>
+                <th>Why</th>
+            </tr>
+            <tr>
+                <td><span class="tag tag-fe">Frontend</span></td>
+                <td><strong>React 19 + Vite</strong></td>
+                <td>Already in use. Keep it. Fast, modern, excellent PWA support.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-fe">Router</span></td>
+                <td><strong>React Router v7</strong> (<code>createBrowserRouter</code>)</td>
+                <td>URL-based navigation, Loaders for pre-fetching data, nested route layouts. Supports nested routes for the sidebar layout pattern. <em>Install: <code>npm install react-router-dom</code></em></td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-fe">Styling</span></td>
+                <td><strong>Tailwind CSS v3</strong></td>
+                <td>Already installed and configured. Consistent design system.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-fe">PWA</span></td>
+                <td><strong>vite-plugin-pwa</strong></td>
+                <td>Already a dev dependency. Just needs configuration. Adds manifest, service worker, and offline support.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-fe">API Client</span></td>
+                <td><strong>Axios</strong></td>
+                <td>Interceptors auto-inject JWT auth header on every request. Install: <code>npm install axios</code></td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-be">Backend</span></td>
+                <td><strong>PHP 8.1 (Custom slim API)</strong></td>
+                <td>Already established. Avoid adding Laravel to keep it lightweight. Just refactor into proper Model/Controller/Util classes.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-be">Auth</span></td>
+                <td><strong>JWT (firebase/php-jwt)</strong></td>
+                <td>Stateless, perfect for a decoupled SPA. Short-lived Access Token (15min) + Refresh Token stored in <code>HttpOnly</code> cookie. <em>Library already a dependency path via Composer.</em></td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-db">Database</span></td>
+                <td><strong>MySQL 8.0</strong></td>
+                <td>Already in Docker. Add tables for: <code>users</code>, <code>properties</code>, <code>categories</code>, <code>documents</code>.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-ai">AI / OCR</span></td>
+                <td><strong>Google Document AI</strong></td>
+                <td>Already fully integrated and working. Extend to support PDF invoices, not just images.</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-infra">Infra</span></td>
+                <td><strong>Docker Compose</strong></td>
+                <td>Add a 3rd service for Nginx as a reverse proxy to combine frontend (port 5173) and backend (port 8000) on a single port, and handle SSL in production.</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ===== FRONTEND PAGES ===== -->
+    <h2 class="section-title" id="frontend-pages">📱 Frontend Pages & Components</h2>
+
+    <div class="card">
+        <h2>App Layout Pattern (Nested Routes)</h2>
+        <p>Use <strong>one root layout</strong> with a persistent sidebar/top-nav. All authenticated pages live inside this layout. Unauthenticated users land on <code>/login</code>.</p>
+        <div class="mermaid">
+graph TD
+    A[/ — Root Layout with Sidebar] --> B[/dashboard]
+    A --> C[/import]
+    A --> D[/transactions]
+    A --> E[/documents]
+    A --> F[/reports]
+    A --> G[/properties]
+    A --> H[/settings]
+    Z[/login] -.->|redirects to /dashboard| A
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Page Inventory</h2>
+
+        <div class="page-card">
+            <div class="page-name">🏠 Dashboard</div>
+            <div class="page-route">Route: /dashboard (default landing page)</div>
+            <ul>
+                <li>KPI cards: Total Income, Total Expenses, Net P&L for selected period</li>
+                <li>Mini bar chart: Monthly cash flow (income vs. expenses)</li>
+                <li>Recent transactions list (last 10, with receipt-linked indicators)</li>
+                <li>Unmatched receipts alert: "You have 3 receipts without a linked transaction"</li>
+                <li>Unmatched transactions alert: "12 transactions need a document"</li>
+                <li>Quick-action buttons: Import Bank Statement, Capture Receipt</li>
+                <li>Property selector dropdown (filter all data by property)</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">📥 Import Documents</div>
+            <div class="page-route">Route: /import</div>
+            <ul>
+                <li><strong>Tab 1 — Bank Statement Import:</strong> Drag-and-drop zone for CSV, QIF, OFX files; preview parsed rows before committing; property assignment; duplicate detection summary</li>
+                <li><strong>Tab 2 — Receipt / Invoice Capture:</strong> Camera capture (mobile) or file upload (desktop) for JPG, PNG, PDF; AI OCR progress indicator; extracted data preview with edit fields; property and category assignment before saving</li>
+                <li><strong>Tab 3 — Bulk Upload:</strong> Multi-file queue for batch processing receipts</li>
+                <li>Import history: Last 5 imports with row counts and timestamps</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">💳 Transactions Ledger</div>
+            <div class="page-route">Route: /transactions</div>
+            <ul>
+                <li>Full sortable/filterable table of all bank transactions</li>
+                <li>Filter by: property, category, date range, type (income/expense), matched status</li>
+                <li>Receipt link status column: green checkmark if matched, orange clock if unmatched</li>
+                <li>Click a transaction to open a side drawer: full details + linked receipts + action to link/unlink a document</li>
+                <li>Inline category assignment dropdown per row</li>
+                <li>Inline property assignment per row</li>
+                <li>Bulk select + bulk assign category/property</li>
+                <li>CSV export of filtered results</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">📁 Document Library</div>
+            <div class="page-route">Route: /documents</div>
+            <ul>
+                <li>Grid/list view of all uploaded receipts, invoices, and documents</li>
+                <li>Thumbnail previews + OCR-extracted metadata (merchant, date, amount)</li>
+                <li>Filter: matched/unmatched, by property, by date, by type (receipt/invoice/contract)</li>
+                <li>Click to open a document detail panel: full image viewer + linked transaction info + edit extracted fields</li>
+                <li>Action: "Find a match" — runs manual match search for any unmatched document</li>
+                <li>Action: Manually link to any transaction from a searchable dropdown</li>
+                <li>Action: Delete (with confirmation)</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">📊 Reports</div>
+            <div class="page-route">Route: /reports</div>
+            <ul>
+                <li><strong>P&L Report:</strong> Income vs. Expenses by category for a date range; exportable as PDF/CSV</li>
+                <li><strong>Schedule E Summary:</strong> Pre-filled IRS Schedule E line items (rents received, repairs, taxes, insurance, depreciation, mortgage interest, etc.) grouped by property</li>
+                <li><strong>Cash Flow Report:</strong> Monthly net cash flow per property</li>
+                <li><strong>Expense Breakdown:</strong> Pie/donut chart by category</li>
+                <li>Date range picker; property filter</li>
+                <li>Print / Export PDF button</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">🏘️ Properties</div>
+            <div class="page-route">Route: /properties</div>
+            <ul>
+                <li>List of rental properties with address, type (SFR, multi-unit, commercial)</li>
+                <li>Add / Edit / Archive property</li>
+                <li>Per-property summary: YTD income, YTD expenses, net P&L</li>
+                <li>Per-property tenant info (optional future feature)</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">⚙️ Settings</div>
+            <div class="page-route">Route: /settings</div>
+            <ul>
+                <li>User profile (name, email, change password)</li>
+                <li>Expense categories: add, rename, assign to Schedule E line items</li>
+                <li>Default currency</li>
+                <li>AI/OCR toggle (enable/disable per upload)</li>
+                <li>Import field mappings: save custom bank CSV column profiles</li>
+                <li>Data export: full database export as JSON/CSV</li>
+            </ul>
+        </div>
+
+        <div class="page-card">
+            <div class="page-name">🔐 Login / Auth</div>
+            <div class="page-route">Route: /login (public, no sidebar)</div>
+            <ul>
+                <li>Email + password login form</li>
+                <li>"Remember me" checkbox (persists refresh token)</li>
+                <li>JWT stored in memory (Access Token) + HttpOnly cookie (Refresh Token)</li>
+                <li>Redirect to /dashboard after login</li>
+                <li>Optional: Admin panel for multi-user setup (future)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== BACKEND API ===== -->
+    <h2 class="section-title" id="backend-api">⚙️ Backend API Structure</h2>
+    <div class="card">
+        <h2>Refactored File Layout</h2>
+        <p>Keep the current PHP approach but organize it properly into layers:</p>
+        <div class="callout callout-info">
+            💡 <strong>No framework needed.</strong> A small PHP router (e.g., <code>bramus/router</code> via Composer, or a manual front controller) is enough to keep things clean without adding Laravel's overhead.
+        </div>
+        <div class="db-table-block">
+backend/
+├── api/                          <span class="db-comment"># API entry points (thin controllers)</span>
+│   ├── auth/
+│   │   ├── login.php
+│   │   ├── logout.php
+│   │   └── refresh.php
+│   ├── transactions/
+│   │   ├── index.php             <span class="db-comment"># GET (list) + DELETE</span>
+│   │   ├── update.php            <span class="db-comment"># PATCH (category, property, etc.)</span>
+│   │   └── import.php            <span class="db-comment"># POST (CSV/QIF upload)</span>
+│   ├── documents/
+│   │   ├── index.php             <span class="db-comment"># GET all documents</span>
+│   │   ├── upload.php            <span class="db-comment"># POST (image/PDF OCR)</span>
+│   │   ├── link.php              <span class="db-comment"># POST (link doc to transaction)</span>
+│   │   └── delete.php            <span class="db-comment"># DELETE</span>
+│   ├── properties/
+│   │   └── index.php             <span class="db-comment"># GET/POST/PUT/DELETE</span>
+│   ├── categories/
+│   │   └── index.php             <span class="db-comment"># GET/POST/PUT/DELETE</span>
+│   └── reports/
+│       ├── pl.php                <span class="db-comment"># P&L for date range + property</span>
+│       ├── schedule_e.php        <span class="db-comment"># Schedule E summary</span>
+│       └── cashflow.php          <span class="db-comment"># Monthly cash flow</span>
+├── config/
+│   ├── db.php                    <span class="db-comment"># PDO connection (keep as-is)</span>
+│   └── jwt.php                   <span class="db-comment"># JWT secret, token TTL settings</span>
+├── middleware/
+│   └── auth.php                  <span class="db-comment"># JWT validation — include in every protected endpoint</span>
+├── models/
+│   ├── Transaction.php           <span class="db-comment"># DB read/write logic for transactions</span>
+│   ├── Document.php              <span class="db-comment"># DB read/write logic for receipts/docs</span>
+│   ├── Property.php
+│   ├── Category.php
+│   └── User.php
+├── utils/
+│   ├── CsvParser.php             <span class="db-comment"># Extracted from import_bank.php</span>
+│   ├── QifParser.php             <span class="db-comment"># NEW: QIF format support</span>
+│   ├── DocumentAI.php            <span class="db-comment"># Extracted from upload.php</span>
+│   └── Matcher.php               <span class="db-comment"># Matching engine (amount + date proximity)</span>
+├── sql/
+│   └── ...migrations             <span class="db-comment"># One file per migration</span>
+└── uploads/
+        </div>
+
+        <h3>API Endpoint Map</h3>
+        <table>
+            <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+            <tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td>Public</td><td>Email/password → JWT</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/auth/refresh</code></td><td>Cookie</td><td>Swap refresh token for new access token</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/auth/logout</code></td><td>JWT</td><td>Clear refresh cookie</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/transactions</code></td><td>JWT</td><td>List all with filters (date, category, property, matched)</td></tr>
+            <tr><td><code>PATCH</code></td><td><code>/api/transactions/update</code></td><td>JWT</td><td>Update category, property, notes</td></tr>
+            <tr><td><code>DELETE</code></td><td><code>/api/transactions</code></td><td>JWT</td><td>Delete one or all</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/transactions/import</code></td><td>JWT</td><td>Import CSV or QIF file</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/documents</code></td><td>JWT</td><td>List receipts/docs with filter</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/documents/upload</code></td><td>JWT</td><td>Upload + OCR process image/PDF</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/documents/link</code></td><td>JWT</td><td>Link document to transaction</td></tr>
+            <tr><td><code>DELETE</code></td><td><code>/api/documents</code></td><td>JWT</td><td>Delete document + file</td></tr>
+            <tr><td><code>GET/POST/PUT/DELETE</code></td><td><code>/api/properties</code></td><td>JWT</td><td>CRUD for rental properties</td></tr>
+            <tr><td><code>GET/POST/PUT/DELETE</code></td><td><code>/api/categories</code></td><td>JWT</td><td>CRUD for expense/income categories</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/reports/pl</code></td><td>JWT</td><td>P&L report (query: date_from, date_to, property_id)</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/reports/schedule-e</code></td><td>JWT</td><td>Schedule E summary by property</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/reports/cashflow</code></td><td>JWT</td><td>Monthly cash flow per property</td></tr>
+        </table>
+    </div>
+
+    <!-- ===== DATABASE ===== -->
+    <h2 class="section-title" id="database">🗄️ Database Schema Plan</h2>
+    <div class="card">
+        <h2>New Tables to Add</h2>
+        <p>The current DB has <code>receipts</code>, <code>receipt_line_items</code>, and <code>bank_transactions</code>. Here's what needs to be added:</p>
+
+        <div class="mermaid">
+erDiagram
+    users ||--o{ bank_transactions : "owns"
+    users ||--o{ receipts : "owns"
+    properties ||--o{ bank_transactions : "tagged to"
+    properties ||--o{ receipts : "tagged to"
+    categories ||--o{ bank_transactions : "classified by"
+    categories ||--o{ receipts : "classified by"
+    bank_transactions ||--o| receipts : "matched to"
+    receipts ||--o{ receipt_line_items : "has"
+        </div>
+
+        <h3>New Tables</h3>
+
+        <p><strong><code>users</code></strong></p>
+        <div class="db-table-block">
+id INT PK AUTO_INCREMENT
+<span class="db-col">name</span>         <span class="db-type">VARCHAR(100)</span>
+<span class="db-col">email</span>        <span class="db-type">VARCHAR(150) UNIQUE NOT NULL</span>
+<span class="db-col">password_hash</span> <span class="db-type">VARCHAR(255) NOT NULL</span>        <span class="db-comment">-- bcrypt</span>
+<span class="db-col">refresh_token</span> <span class="db-type">TEXT</span>                           <span class="db-comment">-- stored server-side for rotation</span>
+<span class="db-col">created_at</span>   <span class="db-type">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+        </div>
+
+        <p><strong><code>properties</code></strong></p>
+        <div class="db-table-block">
+id INT PK AUTO_INCREMENT
+<span class="db-col">user_id</span>      <span class="db-type">INT FK → users.id</span>
+<span class="db-col">name</span>         <span class="db-type">VARCHAR(150) NOT NULL</span>            <span class="db-comment">-- e.g. "123 Main St Unit A"</span>
+<span class="db-col">address</span>      <span class="db-type">TEXT</span>
+<span class="db-col">type</span>         <span class="db-type">ENUM('sfr','multi','commercial','other')</span>
+<span class="db-col">is_active</span>    <span class="db-type">TINYINT(1) DEFAULT 1</span>
+<span class="db-col">created_at</span>   <span class="db-type">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+        </div>
+
+        <p><strong><code>categories</code></strong></p>
+        <div class="db-table-block">
+id INT PK AUTO_INCREMENT
+<span class="db-col">user_id</span>         <span class="db-type">INT FK → users.id</span>              <span class="db-comment">-- NULL = default system category</span>
+<span class="db-col">name</span>            <span class="db-type">VARCHAR(100) NOT NULL</span>          <span class="db-comment">-- e.g. "Repairs & Maintenance"</span>
+<span class="db-col">type</span>            <span class="db-type">ENUM('income','expense')</span>
+<span class="db-col">schedule_e_line</span> <span class="db-type">VARCHAR(100)</span>                   <span class="db-comment">-- e.g. "Line 5 - Repairs"</span>
+<span class="db-col">color</span>           <span class="db-type">VARCHAR(7)</span>                     <span class="db-comment">-- hex color for UI</span>
+        </div>
+
+        <h3>Columns to Add to Existing Tables</h3>
+        <p><strong><code>bank_transactions</code></strong> — add:</p>
+        <div class="db-table-block">
+<span class="db-col">user_id</span>      <span class="db-type">INT FK → users.id</span>
+<span class="db-col">property_id</span>  <span class="db-type">INT FK → properties.id</span>       <span class="db-comment">-- nullable</span>
+<span class="db-col">category_id</span>  <span class="db-type">INT FK → categories.id</span>        <span class="db-comment">-- nullable</span>
+<span class="db-col">receipt_id</span>   <span class="db-type">INT FK → receipts.id</span>          <span class="db-comment">-- nullable (the match)</span>
+<span class="db-col">notes</span>        <span class="db-type">TEXT</span>
+<span class="db-col">source</span>       <span class="db-type">ENUM('csv','qif','ofx','manual')</span>
+<span class="db-col">is_reviewed</span>  <span class="db-type">TINYINT(1) DEFAULT 0</span>
+        </div>
+
+        <p><strong><code>receipts</code></strong> — add:</p>
+        <div class="db-table-block">
+<span class="db-col">user_id</span>      <span class="db-type">INT FK → users.id</span>
+<span class="db-col">property_id</span>  <span class="db-type">INT FK → properties.id</span>       <span class="db-comment">-- nullable</span>
+<span class="db-col">category_id</span>  <span class="db-type">INT FK → categories.id</span>        <span class="db-comment">-- nullable</span>
+<span class="db-col">doc_type</span>     <span class="db-type">ENUM('receipt','invoice','contract','statement','other')</span>
+<span class="db-col">notes</span>        <span class="db-type">TEXT</span>
+        </div>
+    </div>
+
+    <!-- ===== AUTH ===== -->
+    <h2 class="section-title" id="auth">🔐 Authentication Plan</h2>
+    <div class="card">
+        <h2>JWT with HttpOnly Refresh Token</h2>
+        <div class="mermaid">
+sequenceDiagram
+    participant FE as React App
+    participant BE as PHP API
+    participant DB as MySQL
+    FE->>BE: POST /api/auth/login {email, password}
+    BE->>DB: Verify user credentials (bcrypt_verify)
+    DB-->>BE: User record
+    BE-->>FE: Access Token (JWT, 15min) + Refresh Token (HttpOnly cookie, 7d)
+    FE->>BE: GET /api/transactions (Authorization: Bearer accessToken)
+    BE-->>FE: 200 OK + data
+    Note over FE,BE: Access Token expires...
+    FE->>BE: POST /api/auth/refresh (sends cookie automatically)
+    BE-->>FE: New Access Token
+        </div>
+        <h3>Frontend Auth Flow</h3>
+        <ul>
+            <li>Access token stored <strong>in React state / memory only</strong> (never localStorage to prevent XSS)</li>
+            <li>Axios interceptor attaches token to every request header</li>
+            <li>On 401 response, Axios automatically calls <code>/api/auth/refresh</code> and retries</li>
+            <li><code>&lt;ProtectedRoute&gt;</code> component wraps all authenticated pages</li>
+            <li>React Context provides <code>useAuth()</code> hook: <code>{ user, login, logout, isAuthenticated }</code></li>
+        </ul>
+        <h3>Backend Auth Implementation</h3>
+        <ul>
+            <li>Use <code>firebase/php-jwt</code> (add to Composer)</li>
+            <li><code>middleware/auth.php</code>: validates Bearer token on every protected endpoint</li>
+            <li>Refresh token stored in DB (allows forced logout by deleting DB record)</li>
+            <li>Passwords hashed with <code>password_hash($pass, PASSWORD_BCRYPT)</code></li>
+        </ul>
+    </div>
+
+    <!-- ===== PWA ===== -->
+    <h2 class="section-title" id="pwa">📱 PWA & Mobile Strategy</h2>
+    <div class="card">
+        <h2>Progressive Web App Configuration</h2>
+        <p>The <code>vite-plugin-pwa</code> package is already in <code>package.json</code>. It just needs to be configured in <code>vite.config.js</code>.</p>
+        <h3>Key PWA Features to Enable</h3>
+        <table>
+            <tr><th>Feature</th><th>Config</th><th>Benefit</th></tr>
+            <tr>
+                <td>Web App Manifest</td>
+                <td>Name, icons, theme color, start URL, <code>display: "standalone"</code></td>
+                <td>Users can install iMatchBook on their phone's home screen</td>
+            </tr>
+            <tr>
+                <td>Service Worker (Cache-First)</td>
+                <td>Cache JS/CSS/fonts on first load</td>
+                <td>App loads instantly on repeat visits, even offline</td>
+            </tr>
+            <tr>
+                <td>Offline Page</td>
+                <td>Serve cached data when network is unavailable</td>
+                <td>Show transaction list from cache when offline</td>
+            </tr>
+            <tr>
+                <td>Camera API</td>
+                <td>Already in CameraCapture.jsx via <code>getUserMedia()</code></td>
+                <td>Snap receipts from phone camera — <strong>requires HTTPS in production</strong></td>
+            </tr>
+            <tr>
+                <td>Share Target</td>
+                <td>Register as a share target in manifest</td>
+                <td>Share a photo from gallery directly into iMatchBook</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ===== AI PIPELINE ===== -->
+    <h2 class="section-title" id="ai">🤖 AI Pipeline Evolution</h2>
+    <div class="card">
+        <h2>Extending the Document AI Integration</h2>
+        <div class="two-col">
+            <div class="status-item status-complete">
+                <h3 style="color:var(--success)">✅ Currently Working</h3>
+                <ul>
+                    <li>JPEG/PNG receipt → Google Document AI</li>
+                    <li>Extracts: merchant, date, total, payment type, card last 4, line items</li>
+                    <li>Proximity matcher (±3 days, exact amount)</li>
+                    <li>Duplicate detection (MD5 hash)</li>
+                </ul>
+            </div>
+            <div class="status-item status-new">
+                <h3 style="color:var(--primary)">🆕 To Add</h3>
+                <ul>
+                    <li><strong>PDF support</strong> — invoices, utility bills</li>
+                    <li><strong>Fuzzy matching</strong> — merchant name similarity to improve match rate</li>
+                    <li><strong>Auto-categorization</strong> — suggest category based on merchant name</li>
+                    <li><strong>Confidence scoring</strong> — flag low-confidence OCR for manual review</li>
+                    <li><strong>Auto-property detection</strong> — if merchant matches a known property address</li>
+                </ul>
+            </div>
+        </div>
+        <div class="callout callout-warning" style="margin-top:1.25rem;">
+            ⚠️ <strong>Security:</strong> The Google service account JSON keys (<code>imatchbook-app-key-business.json</code>) are currently inside the <code>backend/</code> folder. They should be moved <strong>outside the Docker web root</strong> and referenced via environment variable paths in production.
+        </div>
+    </div>
+
+    <!-- ===== TODO LIST ===== -->
+    <h2 class="section-title" id="todo">✅ Prioritized TODO List</h2>
+    <div class="card">
+        <h2>Development Roadmap</h2>
+
+        <p class="todo-group">🔴 Phase 1 — Foundation (Do First)</p>
+        <ul class="todo-list">
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Add <code>firebase/php-jwt</code> via Composer and build <code>auth/login.php</code>, <code>auth/refresh.php</code>, <code>auth/logout.php</code></span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-db">DB</span> Create migration for <code>users</code> table + seed a default admin user</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Create <code>middleware/auth.php</code> JWT validation and include in all protected endpoints</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Install <code>react-router-dom</code> and set up <code>createBrowserRouter</code> with nested layout route</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>AuthContext</code> with <code>useAuth()</code> hook, login/logout, token storage in memory</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>&lt;ProtectedRoute&gt;</code> wrapper component</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/login</code> page UI</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Install <code>axios</code> and create <code>src/services/api.js</code> with interceptors for auth header + refresh retry</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Replace all hard-coded <code>http://localhost:8000</code> URLs with <code>axios</code> instance calls via <code>VITE_API_BASE</code> env var</span></li>
+        </ul>
+
+        <p class="todo-group">🟡 Phase 2 — Core Bookkeeping Features</p>
+        <ul class="todo-list">
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-db">DB</span> Create migrations for <code>properties</code> and <code>categories</code> tables</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-db">DB</span> Add <code>property_id</code>, <code>category_id</code>, <code>receipt_id</code>, <code>notes</code>, <code>source</code>, <code>user_id</code> to <code>bank_transactions</code></span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-db">DB</span> Add <code>property_id</code>, <code>category_id</code>, <code>doc_type</code>, <code>user_id</code> to <code>receipts</code></span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>models/Transaction.php</code>, <code>models/Document.php</code>, <code>models/Property.php</code>, <code>models/Category.php</code></span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/properties/index.php</code> (CRUD)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/categories/index.php</code> with default Schedule E categories seeded</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Update <code>api/transactions/index.php</code> to support filter params (property, category, date, matched)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/transactions/update.php</code> (PATCH: assign category, property, notes)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build persistent sidebar layout with nav links (Dashboard, Import, Transactions, Documents, Reports, Properties, Settings)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/properties</code> page (list + add/edit form)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Upgrade <code>TransactionList</code>: add category/property inline assignment, receipt-linked badge, filter by matched status, side drawer detail view</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/documents</code> page with grid view, thumbnails, filter by property/matched status</span></li>
+        </ul>
+
+        <p class="todo-group">🟢 Phase 3 — Import Improvements</p>
+        <ul class="todo-list">
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Extract CSV logic into <code>utils/CsvParser.php</code></span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>utils/QifParser.php</code> for QIF format support (file <code>bank_transactions.QIF</code> already exists as a sample)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Add PDF support to <code>utils/DocumentAI.php</code> (mime type: <code>application/pdf</code>)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Rebuild <code>/import</code> as a 3-tab page: Bank Statement, Receipt Capture, Bulk Upload</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Add import preview step: show parsed rows before committing to DB</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Add property assignment to import flow</span></li>
+        </ul>
+
+        <p class="todo-group">🔵 Phase 4 — Dashboard & Reports</p>
+        <ul class="todo-list">
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/reports/pl.php</code> — P&L grouped by category for date range + property</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/reports/schedule_e.php</code> — group categories by IRS Schedule E line</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-be">Backend</span> Build <code>api/reports/cashflow.php</code> — monthly net by property</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/dashboard</code> page with KPI cards, mini chart, recent activity</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/reports</code> page with P&L table, Schedule E summary, cash flow chart</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Add <code>print / export PDF</code> to reports page</span></li>
+        </ul>
+
+        <p class="todo-group">⚪ Phase 5 — PWA & Polish</p>
+        <ul class="todo-list">
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-infra">Infra</span> Configure <code>vite-plugin-pwa</code> in <code>vite.config.js</code>: manifest, icons, service worker strategy</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-infra">Infra</span> Add Nginx service to <code>docker-compose.yml</code> as reverse proxy (serve frontend + proxy <code>/api/*</code> to backend)</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-infra">Infra</span> Move Google service account keys outside web root, use env vars</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Build <code>/settings</code> page: profile, categories manager, currency settings</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Add CSV export to transactions and reports</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-fe">Frontend</span> Refine responsive/mobile styles for all pages</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-ai">AI</span> Add auto-category suggestion based on merchant name patterns</span></li>
+            <li><span class="todo-check"></span><span class="todo-text"><span class="tag tag-ai">AI</span> Improve matching engine with fuzzy merchant name matching (Levenshtein distance)</span></li>
+        </ul>
+
+        <div class="callout callout-success" style="margin-top: 1.5rem;">
+            ✅ <strong>Start with Phase 1.</strong> Authentication and routing are the two structural prerequisites that everything else depends on. Build the skeleton first, then layer features on top.
+        </div>
+    </div>
+
+    <!-- ===== COMPETITIVE INSIGHTS ===== -->
+    <div class="card" style="border: 2px solid #e0e7ff;">
+        <h2>💡 Feature Ideas from Competitive Analysis</h2>
+        <p>Based on studying Stessa, Landlord Studio, and Baselane — features that make real estate bookkeeping apps successful:</p>
+        <div class="three-col">
+            <div>
+                <h3>📥 Stessa-Inspired</h3>
+                <ul>
+                    <li>Property-level P&L dashboard</li>
+                    <li>Automatic expense categorization rules</li>
+                    <li>Tax-ready Schedule E export</li>
+                    <li>Single "Home" overview of all properties</li>
+                </ul>
+            </div>
+            <div>
+                <h3>📱 Landlord Studio-Inspired</h3>
+                <ul>
+                    <li>Mobile-first receipt capture flow</li>
+                    <li>Mileage tracking for property visits</li>
+                    <li>Rent income recording & tracking</li>
+                    <li>Outstanding balance reminders</li>
+                </ul>
+            </div>
+            <div>
+                <h3>🏦 Baselane-Inspired</h3>
+                <ul>
+                    <li>Bank account-level dashboard</li>
+                    <li>Category rules automation</li>
+                    <li>Net Operating Income (NOI) tracking</li>
+                    <li>Cash-on-cash return calculator</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer style="text-align: center; padding: 2rem; color: var(--text-muted); background: #e2e8f0; font-size: 0.85rem;">
+    iMatchBook App Plan & Roadmap &bull; Last Updated April 2026
+</footer>
+
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+</script>
+</body>
+</html>

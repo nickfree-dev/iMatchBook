@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Control & Authorization Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0891b2;
+            --bg-light: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .card h3 {
+            color: var(--text);
+            margin: 1.25rem 0 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .card h4 {
+            color: var(--text-muted);
+            margin: 1rem 0 0.5rem;
+            font-size: 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        tr:hover { background: rgba(37, 99, 235, 0.03); }
+        
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            color: var(--primary-dark);
+        }
+        
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+        
+        .alert-danger {
+            background: #fee2e2;
+            border-color: var(--danger);
+            color: #991b1b;
+        }
+        
+        .alert-info {
+            background: #e0f2fe;
+            border-color: var(--info);
+            color: #0c4a6e;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #e0f2fe; color: #0c4a6e; }
+        
+        .rating-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+        
+        .rating-moderate { background: #fef3c7; color: #92400e; }
+        .rating-good { background: #d1fae5; color: #065f46; }
+        
+        .mermaid {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .toc {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .toc ul { list-style: none; padding-left: 1rem; }
+        .toc a { color: var(--primary); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1rem; }
+            header h1 { font-size: 1.75rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔐 Access Control & Authorization Guide</h1>
+        <p>Technical documentation for the application's security architecture</p>
+        <div style="margin-top: 1rem;">
+            <span class="rating-box rating-moderate">🛡️ Security: Moderate</span>
+            <span class="rating-box rating-good">⚡ Efficiency: Good to Mixed</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="card toc">
+            <h2>📑 Table of Contents</h2>
+            <ul>
+                <li><a href="#routing">1. Routing Architecture</a></li>
+                <li><a href="#whitelists">2. Page Categories (Roles & Contexts)</a></li>
+                <li><a href="#role-enforcement">3. Centralized Role Enforcement</a></li>
+                <li><a href="#open-pages">4. Open Course & Public Pages</a></li>
+                <li><a href="#api-router">5. API Router Flow</a></li>
+                <li><a href="#question-router">6. Question Router Flow</a></li>
+                <li><a href="#asset-router">7. Asset Router Flow</a></li>
+                <li><a href="#auth-functions">8. Key Authentication Functions (Auth2)</a></li>
+                <li><a href="#security">9. Security Concerns</a></li>
+                <li><a href="#efficiency">10. Architecture Benefits</a></li>
+                <li><a href="#summary">11. Summary Table</a></li>
+            </ul>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="card">
+            <h2>📋 Executive Summary</h2>
+            <p>The application uses a <strong>centralized routing system</strong> with specialized routers for different request types. All requests ultimately flow through <code>.htaccess</code> rewrite rules which dispatch to the appropriate router.</p>
+            
+            <div class="mermaid">
+flowchart LR
+    Request[HTTP Request] --> htaccess[.htaccess]
+    htaccess --> |"/api/*"| api[router_api.php]
+    htaccess --> |"/preview/*"| preview[router_preview.php]
+    htaccess --> |"/asset/*"| assets[router_assets.php]
+    htaccess --> |"/courses/.../assignment/*"| qrouter[router_question.php]
+    htaccess --> |"everything else"| security[router_security.php]
+            </div>
+        </div>
+
+        <!-- 1. Routing Architecture -->
+        <div class="card" id="routing">
+            <h2>1. Routing Architecture</h2>
+            <h3>The 5 Routers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Router</th>
+                        <th>Triggered By</th>
+                        <th>Primary Purpose</th>
+                        <th>Access Check</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>router_security.php</code></td>
+                        <td>Catch-all rule</td>
+                        <td>Main dispatcher + WebShell</td>
+                        <td>Per-whitelist</td>
+                    </tr>
+                    <tr>
+                        <td><code>router_api.php</code></td>
+                        <td><code>RewriteRule api/(.*)</code></td>
+                        <td>API requests</td>
+                        <td><code>getUserCourseAccessDetails()</code> + explicit check</td>
+                    </tr>
+                    <tr>
+                        <td><code>router_question.php</code></td>
+                        <td>Assignment question URLs</td>
+                        <td>Question rendering</td>
+                        <td><code>getUserCourseAccessDetails()</code> + prereqs</td>
+                    </tr>
+                    <tr>
+                        <td><code>router_preview.php</code></td>
+                        <td><code>RewriteRule preview/(.*)</code></td>
+                        <td>Question previews</td>
+                        <td><code>checkUserLoginAndSetUserInfo(true)</code> only</td>
+                    </tr>
+                    <tr>
+                        <td><code>router_assets.php</code></td>
+                        <td><code>RewriteRule asset/(.*)</code></td>
+                        <td>Shared files/avatars</td>
+                        <td>Pattern-based course access</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 2. Page Categories -->
+        <div class="card" id="whitelists">
+            <h2>2. Page Categories (Context-Based Roles)</h2>
+            <p>Pages requiring login are organized in <code>page_whitelists.php</code> into two main contexts, each sub-grouped by the minimum required role.</p>
+            
+            <h3>A. Course Pages (Login + Course Context)</h3>
+            <p><span class="badge badge-success">Secure</span> Requires logged-in session AND valid access to a specific course. Resolved via <code>authorize('require_login', $COURSE)</code>.</p>
+            <table>
+                <thead>
+                    <tr><th>Role</th><th>Requirement</th><th>Example Pages</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>admin</code></td>
+                        <td><code>securityLevel >= 3</code></td>
+                        <td><code>delete_all_progress_analytics_json_in_course.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>instructor</code></td>
+                        <td><code>securityLevel >= 2</code></td>
+                        <td><code>instructorDashboard.php, instructorGrades.php, assignmentManage.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>member</code></td>
+                        <td><code>securityLevel >= 0</code></td>
+                        <td><code>courseIndex.php, studentGrades.php, liveScreen.php</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>B. General Pages (Login + No Course)</h3>
+            <p><span class="badge badge-info">Identity Only</span> Requires login but operates outside specific courses. Resolved via <code>authorize('require_login')</code>.</p>
+            <table>
+                <thead>
+                    <tr><th>Role</th><th>Requirement</th><th>Example Pages</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>admin</code></td>
+                        <td><code>is_admin()</code></td>
+                        <td><code>adminDashboard.php, courseCreate.php, admin_activeUsers.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>instructor</code></td>
+                        <td><code>INSTRUCTOR_FLAG || Admin</code></td>
+                        <td>(Reserved for future global instructor tools)</td>
+                    </tr>
+                    <tr>
+                        <td><code>login</code></td>
+                        <td>Any authenticated user</td>
+                        <td><code>index.php, courseBrowser.php</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3. Role Enforcement -->
+        <div class="card" id="role-enforcement">
+            <h2>3. Centralized Role Enforcement</h2>
+            <div class="alert alert-success">
+                <strong>✅ Unified Security:</strong> Role enforcement is now centralized in <code>router_security.php</code>. Pages no longer need their own <code>if (!is_admin())</code> or <code>if (!$is_instructor)</code> guards.
+            </div>
+            
+            <p>The routing flow follows this logic:</p>
+            <ol>
+                <li><strong>Lookup:</strong> <code>findPageRole($name)</code> returns the context and required role.</li>
+                <li><strong>Authenticate:</strong> Calls <code>authorize()</code> via the <strong>Auth2</strong> system.</li>
+                <li><strong>Verify Role:</strong> Router checks <code>$securityLevel</code> or identity flags against config.</li>
+                <li><strong>Deny:</strong> If role is insufficient, router calls <code>show_lostPageMessage()</code> with a 403 status.</li>
+            </ol>
+            
+            <div class="mermaid">
+graph TD
+    Start[Router Received Request] --> Lookup[findPageRole in page_whitelists.php]
+    Lookup -->|Found| Auth[Auth2: authorize & handleAuthResult]
+    Auth --> Role{Check Role?}
+    Role -->|Admin| IsAdmin{Is Admin?}
+    Role -->|Instructor| IsInst{Is Instructor?}
+    Role -->|Member/Login| Pass[Page Loads]
+    
+    IsAdmin -->|Yes| Pass
+    IsAdmin -->|No| Deny[403 Forbidden]
+    IsInst -->|Yes| Pass
+    IsInst -->|No| Deny
+            </div>
+        </div>
+
+        <!-- 4. Open & Public Pages -->
+        <div class="card" id="open-pages">
+            <h2>4. Open Course & Public Pages</h2>
+            <p>These categories handle student-facing content and public utilities using descriptive whitelist names.</p>
+            
+            <table>
+                <thead>
+                    <tr><th>Category</th><th>Policy</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>open_course</code></td>
+                        <td><code>course_dependent</code></td>
+                        <td>Allows non-reg for open courses (e.g., <code>studentHW.php</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>open_joinevent</code></td>
+                        <td><code>allow_all</code></td>
+                        <td>Special handling for <code>joinEvent.php</code> (unreliable URL course)</td>
+                    </tr>
+                    <tr>
+                        <td><code>public_webshell</code></td>
+                        <td><code>allow_all</code></td>
+                        <td>Public pages with WebShell (e.g., <code>animationPortfolio.php</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>public_api</code></td>
+                        <td><code>allow_all</code></td>
+                        <td>Public APIs (e.g., <code>api_createQuestion.php</code>)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 5. API Router Flow -->
+        <div class="card" id="api-router">
+            <h2>5. API Router Flow</h2>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant router_api.php
+    participant Auth2
+    participant Specific API
+
+    Client->>router_api.php: /api/grades?action=...
+    router_api.php->>router_api.php: Get $COURSE from session/GET
+    router_api.php->>Auth2: authorize('require_login', $COURSE)
+    alt access denied
+        router_api.php-->>Client: 403 Forbidden
+    end
+    router_api.php->>Specific API: require(api_grades.php)
+    Specific API-->>Client: JSON Response
+            </div>
+
+            <h3>API Endpoints</h3>
+            <table>
+                <tr><th>apin param</th><th>Target File</th></tr>
+                <tr><td><code>likes</code></td><td>api_likes.php</td></tr>
+                <tr><td><code>chat</code></td><td>api_chat.php</td></tr>
+                <tr><td><code>grades</code></td><td>api_grades.php</td></tr>
+                <tr><td><code>users</code></td><td>api_users.php</td></tr>
+                <tr><td><code>questionData</code></td><td>api_questionData.php</td></tr>
+                <tr><td><code>uploadFile</code></td><td>api_uploadFile.php</td></tr>
+                <tr><td><code>live</code></td><td>api_live.php</td></tr>
+                <tr><td><code>notifications</code></td><td>api_notifications.php</td></tr>
+            </table>
+        </div>
+
+        <!-- 6. Question Router Flow -->
+        <div class="card" id="question-router">
+            <h2>6. Question Router Flow</h2>
+            <p>This router is more complex - it handles question rendering with multiple access layers:</p>
+            <ol>
+                <li><strong>User Login:</strong> <code>checkUserLoginAndSetUserInfo(true)</code> for non-preview requests</li>
+                <li><strong>Course Access:</strong> <code>getUserCourseAccessDetails($COURSE)</code> → must return <code>securityLevel >= 0</code></li>
+                <li><strong>Assignment Access:</strong> <code>checkUserAccessToAssignment()</code> for students</li>
+                <li><strong>Prerequisite Check:</strong> Questions hidden until prereqs are satisfied</li>
+                <li><strong>Password Protection:</strong> For quizzes with passwords</li>
+                <li><strong>Time Limits:</strong> For timed quizzes</li>
+            </ol>
+        </div>
+
+        <!-- 7. Asset Router Flow -->
+        <div class="card" id="asset-router">
+            <h2>7. Asset Router Flow</h2>
+            <p>Handles static files with pattern-based access control:</p>
+            <table>
+                <thead>
+                    <tr><th>Pattern</th><th>Example URL</th><th>Access Rule</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Avatar</td><td><code>asset/user@email.com/shared/avatar/...</code></td><td>Login or remember-me</td></tr>
+                    <tr><td>Course shared</td><td><code>asset/course/11012/files/doc.pdf</code></td><td>Course enrollment</td></tr>
+                    <tr><td>Course restricted</td><td><code>asset/course/11012/rest/doc.pdf</code></td><td>Instructor only</td></tr>
+                    <tr><td>Student uploads</td><td><code>asset/course/11012/filess/student@.../...</code></td><td>Owner or instructor</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 8. Auth Functions (Auth2) -->
+        <div class="card" id="auth-functions">
+            <h2>8. Key Authentication Functions (Auth2 System)</h2>
+            <p>The application has migrated to the <strong>Auth2</strong> system for centralized identity and course access management.</p>
+            
+            <table>
+                <thead>
+                    <tr><th>Function</th><th>Location</th><th>Purpose</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>authorize($policy, $course)</code></td>
+                        <td>utilities_auth2.php</td>
+                        <td>Resolves identity/course access using a specific policy (e.g., <code>require_login</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><code>handleAuthResult($auth)</code></td>
+                        <td>utilities_auth2.php</td>
+                        <td>Sets legacy globals ($username, etc.) or redirects/dies on failure.</td>
+                    </tr>
+                    <tr>
+                        <td><code>getUserCourseAccessDetails()</code></td>
+                        <td>utilities_authentication.php</td>
+                        <td>Returns security level (-1 to 3) for a user in a course.</td>
+                    </tr>
+                    <tr>
+                        <td><code>get_current_username_or_ip()</code></td>
+                        <td>utilities_authentication.php</td>
+                        <td>Resolves the identity/username (using Auth2) or IP for logging.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Security Levels (Context-Scoped)</h3>
+            <p>These levels are returned for <code>course_pages</code> access.</p>
+            <table>
+                <tr><th>Level</th><th>Constant</th><th>Name</th><th>Role Match</th></tr>
+                <tr><td>-1</td><td><code>$ACCESS_DENIED</code></td><td><span class="badge badge-danger">No access</span></td><td>N/A</td></tr>
+                <tr><td>0</td><td><code>$ACCESS_STUDENT</code></td><td><span class="badge badge-info">Student</span></td><td><code>member</code></td></tr>
+                <tr><td>1</td><td><code>$ACCESS_TA</code></td><td><span class="badge badge-info">Teaching Assistant</span></td><td><code>member</code></td></tr>
+                <tr><td>2</td><td><code>$ACCESS_INSTRUCTOR</code></td><td><span class="badge badge-success">Instructor</span></td><td><code>instructor</code></td></tr>
+                <tr><td>3</td><td><code>$ACCESS_ADMIN</code></td><td><span class="badge badge-success">System Admin</span></td><td><code>admin</code></td></tr>
+            </table>
+        </div>
+
+        <!-- 9. Security Concerns -->
+        <div class="card" id="security">
+            <h2>9. Security Concerns</h2>
+            
+            <div class="alert alert-danger">
+                <h4>🚨 Whitelist F Fallback Risk</h4>
+                <p><strong>Issue:</strong> Unlisted PHP files can execute without login.</p>
+                <p><strong>Fix:</strong> Change fallback to <code>checkUserLoginAndSetUserInfo(false)</code> or deny access entirely.</p>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ SPC (Student Pin Code) Handling</h4>
+                <p><strong>Issue:</strong> Previously, the SPC parameter could bypass access checks.</p>
+                <p><strong>Status:</strong> Fixed in <code>router_api.php</code> and <code>utilities_authentication.php</code>. Instructor "Student View" may need testing.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <h4>ℹ️ Role-Based Config</h4>
+                <p><strong>Status:</strong> COMPLETED (March 2026). Whitelists are now structured by role in <code>page_whitelists.php</code> and enforced by <code>router_security.php</code>.</p>
+            </div>
+        </div>
+
+        <!-- 10. Efficiency -->
+        <div class="card" id="efficiency">
+            <h2>10. Architecture Benefits</h2>
+            
+            <div class="grid-2">
+                <div class="alert alert-success">
+                    <h4>✅ DRY Page Logic</h4>
+                    <p>Pages no longer duplicate access checks. Removing 100+ lines of redundant <code>if (!is_admin())</code> across the codebase.</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <h4>ℹ️ Declarative Security</h4>
+                    <p>Security is now "declared" in the config rather than implemented in code, making audits significantly easier.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Summary -->
+        <div class="card" id="summary">
+            <h2>11. Summary Table</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Access Method</th>
+                        <th>Login Required</th>
+                        <th>Course Check</th>
+                        <th>WebShell</th>
+                        <th>Example Pages</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>course_pages</code></td>
+                        <td>✅ Strict</td>
+                        <td>✅ Enforced</td>
+                        <td>✅</td>
+                        <td><code>instructorDashboard.php</code> (instructor), <code>courseIndex.php</code> (member)</td>
+                    </tr>
+                    <tr>
+                        <td><code>general_pages</code></td>
+                        <td>✅ Strict</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td><code>adminDashboard.php</code> (admin), <code>index.php</code> (login)</td>
+                    </tr>
+                    <tr>
+                        <td><code>open_course</code></td>
+                        <td>🔄 Course-dep</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><code>studentHW.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>public_webshell</code></td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td><code>animationPortfolio.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>public_api</code></td>
+                        <td>❌</td>
+                        <td>Varies</td>
+                        <td>❌</td>
+                        <td><code>api_createQuestion.php</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>private_api</code></td>
+                        <td>✅ Strict</td>
+                        <td>Varies</td>
+                        <td>❌</td>
+                        <td><code>api_studentData.php</code></td>
+                    </tr>
+                    <tr>
+                        <td>router_api.php</td>
+                        <td>🔄</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>All /api/* requests</td>
+                    </tr>
+                    <tr>
+                        <td>router_question.php</td>
+                        <td>🔄</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>Question rendering</td>
+                    </tr>
+                    <tr>
+                        <td>router_preview.php</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>Question previews</td>
+                    </tr>
+                    <tr>
+                        <td>router_assets.php</td>
+                        <td>🔄</td>
+                        <td>Pattern-based</td>
+                        <td>❌</td>
+                        <td>Static files</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Generated on <span id="date"></span> | Access Control Documentation v1.0</p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>

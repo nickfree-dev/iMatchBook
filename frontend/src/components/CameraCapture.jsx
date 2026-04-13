@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import api from '../services/api';
 
 const CameraCapture = () => {
     const [uploading, setUploading] = useState(false);
@@ -9,15 +10,13 @@ const CameraCapture = () => {
 
     const handleLink = async (transactionId, receiptPath) => {
         try {
-            const response = await fetch('http://localhost:8000/backend/api/link_receipt.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ transaction_id: transactionId, receipt_path: receiptPath })
+            const { data } = await api.post('/backend/api/link_receipt.php', {
+                transaction_id: transactionId,
+                receipt_path: receiptPath
             });
-            const data = await response.json();
             if (data.success) {
                 setMessage({ type: 'success', text: 'Receipt linked successfully!' });
-                setMatches([]); // Clear matches
+                setMatches([]);
             } else {
                 alert(data.message || 'Linking failed');
             }
@@ -54,12 +53,11 @@ const CameraCapture = () => {
         setMatches([]);
 
         try {
-            const response = await fetch('http://localhost:8000/backend/api/upload.php', {
-                method: 'POST',
-                body: formData,
+            const response = await api.post('/backend/api/upload.php', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            const data = await response.json();
+            const data = response.data;
             
             // --- Debug Logging ---
             console.group('🧾 Receipt Upload Debug');

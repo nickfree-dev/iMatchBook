@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMatchBook Project Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0891b2;
+            --bg-light: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .card h3 {
+            color: var(--text);
+            margin: 1.25rem 0 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            color: var(--primary-dark);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .status-item {
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .status-complete { border-left: 4px solid var(--success); }
+        .status-pending { border-left: 4px solid var(--warning); }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .tag-frontend { background: #dbeafe; color: #1e40af; }
+        .tag-backend { background: #fef3c7; color: #92400e; }
+        .tag-infra { background: #dcfce7; color: #166534; }
+
+        @media (max-width: 768px) {
+            .status-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📖 Project Overview & Roadmap</h1>
+        <p>Your guide to understanding iMatchBook's architecture and progress</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>🎯 What is iMatchBook?</h2>
+            <p>iMatchBook is an intelligent expense reconciliation platform. It allows users to import bank transaction data and use AI to automatically match those transactions with photos of physical receipts.</p>
+            
+            <div class="mermaid">
+                graph TD
+                    Bank[Bank CSV] --> |Import| DB[(MySQL)]
+                    Receipt[Receipt Photo] --> |Upload| AI[Document AI]
+                    AI --> |Extract Data| Matcher[Matching Engine]
+                    Matcher --> |Suggestion| UI[User Review]
+                    UI --> |Link| DB
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏗️ Technical Stack</h2>
+            <table>
+                <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+                <tr><td>Frontend</td><td>React + Vite + Tailwind CSS</td><td>Interactive UI, camera capture, matching review.</td></tr>
+                <tr><td>Backend API</td><td>PHP 8.1 (Custom)</td><td>Handles file uploads, dynamic CSV parsing, and AI orchestration.</td></tr>
+                <tr><td>AI Service</td><td>Google Document AI</td><td>Deep extraction of merchant, date, total, and items.</td></tr>
+                <tr><td>Infrastructure</td><td>Docker / Docker Compose</td><td>Standardized development and deployment environment.</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Current Feature Status</h2>
+            <div class="status-grid">
+                <div class="status-item status-complete">
+                    <h3 style="color: var(--success);">✅ Completed Features</h3>
+                    <ul>
+                        <li><strong>Dynamic Bank Import</strong>: Intelligently detects columns in CSV files.</li>
+                        <li><strong>AI OCR Pipeline</strong>: Integrated with Google Document AI specialized receipt processor.</li>
+                        <li><strong>Proximity Matcher</strong>: Automatic suggestion of transactions within +/- 3 days of receipt.</li>
+                        <li><strong>Image Management</strong>: Secure upload, unique renaming, and duplicate hash checking.</li>
+                    </ul>
+                </div>
+                <div class="status-item status-pending">
+                    <h3 style="color: var(--warning);">🕒 In Progress / Pending</h3>
+                    <ul>
+                        <li><strong>Project Refactoring</strong>: Moving API logic into proper Model/Util classes.</li>
+                        <li><strong>QIF Support</strong>: Expanding bank imports to support Quicken/QIF formats.</li>
+                        <li><strong>Authentication</strong>: Adding user accounts and secure session management.</li>
+                        <li><strong>Reverse Search</strong>: Ability to find a receipt starting from the transaction list.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 Backend Deep Dive</h2>
+            <p>The backend is built with <strong>PHP</strong> and acts as a stateless API bridge.</p>
+            <h3>Key Components:</h3>
+            <ul>
+                <li><code>api/import_bank.php</code>: Uses dynamic header detection. It doesn't rely on fixed column orders, allowing it to work with multiple banks.</li>
+                <li><code>api/upload.php</code>: Communicates with Google Cloud using a Service Account key (<code>.json</code>). It handles binary image uploads and interprets Document AI's JSON response into a normalized format.</li>
+                <li><code>config/db.php</code>: Centralized connection logic using <strong>PDO</strong> for security.</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 2px solid var(--danger);">
+            <h2 style="color: var(--danger);">🌍 Real Server Deployment Tips</h2>
+            <p>If you are moving this to a production VPS (like DigitalOcean, AWS, or a dedicated server):</p>
+            <ol>
+                <li><strong>SSL is Mandatory</strong>: Camera capture (getUserMedia) requires HTTPS in modern browsers.</li>
+                <li><strong>Environment Keys</strong>: Ensure your <code>.json</code> service keys for Google Cloud are placed <strong>outside</strong> the public web root or protected by <code>.htaccess</code>.</li>
+                <li><strong>WAF / CORS</strong>: Update <code>Access-Control-Allow-Origin</code> in the PHP files to point to your domain instead of <code>*</code>.</li>
+                <li><strong>Docker Production</strong>: Use <code>docker-compose -f docker-compose.yml up -d</code> but ensure you have a reverse proxy (Nginx/Traefik) handling SSL.</li>
+            </ol>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        iMatchBook Technical Guide &copy; 2026
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>
