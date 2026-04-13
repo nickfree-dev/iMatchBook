@@ -136,23 +136,23 @@ const TransactionList = () => {
     return (
         <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="p-6 border-b border-white/8">
+            <div className="p-6 border-b border-slate-200 dark:border-white/8 transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                     <div>
-                        <h1 className="text-xl font-bold text-white">Transactions</h1>
-                        <p className="text-slate-400 text-sm mt-0.5">{transactions.length} total records</p>
+                        <h1 className="text-xl font-bold text-slate-900 dark:text-white">Transactions</h1>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">{transactions.length} total records</p>
                     </div>
                     <div className="flex gap-2">
                         <button
                             onClick={fetchTransactions}
-                            className="text-indigo-400 hover:text-indigo-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-indigo-500/10 transition-colors"
+                            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-indigo-500/10 transition-colors"
                         >
                             Refresh
                         </button>
                         {transactions.length > 0 && (
                             <button
                                 onClick={handleClearAll}
-                                className="text-red-400 hover:text-red-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-red-500/10 border border-red-500/20 transition-colors"
+                                className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-red-500/10 border border-red-200 dark:border-red-500/20 transition-colors"
                             >
                                 Clear All
                             </button>
@@ -162,17 +162,17 @@ const TransactionList = () => {
 
                 {/* Summary KPIs */}
                 <div className="grid grid-cols-3 gap-3 mb-5">
-                    <div className="bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3">
-                        <p className="text-xs text-green-400 font-medium mb-1">Income</p>
-                        <p className="text-green-300 font-bold">${totalIncome.toFixed(2)}</p>
+                    <div className="bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20 rounded-xl px-4 py-3 shadow-sm">
+                        <p className="text-xs text-green-600 dark:text-green-400 font-semibold mb-1 uppercase tracking-wider">Income</p>
+                        <p className="text-green-700 dark:text-green-300 font-bold text-lg">${totalIncome.toFixed(2)}</p>
                     </div>
-                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                        <p className="text-xs text-red-400 font-medium mb-1">Expenses</p>
-                        <p className="text-red-300 font-bold">${Math.abs(totalExpense).toFixed(2)}</p>
+                    <div className="bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-xl px-4 py-3 shadow-sm">
+                        <p className="text-xs text-red-600 dark:text-red-400 font-semibold mb-1 uppercase tracking-wider">Expenses</p>
+                        <p className="text-red-700 dark:text-red-300 font-bold text-lg">${Math.abs(totalExpense).toFixed(2)}</p>
                     </div>
-                    <div className={`border rounded-xl px-4 py-3 ${net >= 0 ? 'bg-indigo-500/10 border-indigo-500/20' : 'bg-orange-500/10 border-orange-500/20'}`}>
-                        <p className={`text-xs font-medium mb-1 ${net >= 0 ? 'text-indigo-400' : 'text-orange-400'}`}>Net</p>
-                        <p className={`font-bold ${net >= 0 ? 'text-indigo-300' : 'text-orange-300'}`}>${net.toFixed(2)}</p>
+                    <div className={`border rounded-xl px-4 py-3 shadow-sm ${net >= 0 ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-100 dark:border-indigo-500/20' : 'bg-orange-50 dark:bg-orange-500/10 border-orange-100 dark:border-orange-500/20'}`}>
+                        <p className={`text-xs font-semibold mb-1 uppercase tracking-wider ${net >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-orange-600 dark:text-orange-400'}`}>Net</p>
+                        <p className={`font-bold text-lg ${net >= 0 ? 'text-indigo-700 dark:text-indigo-300' : 'text-orange-700 dark:text-orange-300'}`}>${net.toFixed(2)}</p>
                     </div>
                 </div>
 
@@ -181,12 +181,12 @@ const TransactionList = () => {
                     <input
                         type="text"
                         placeholder="Search description…"
-                        className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="flex-1 px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <select
-                        className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
                         value={filterType}
                         onChange={(e) => setFilterType(e.target.value)}
                     >
@@ -194,7 +194,7 @@ const TransactionList = () => {
                         <option value="income">Income (+)</option>
                         <option value="expense">Expenses (-)</option>
                     </select>
-                    <span className="hidden sm:flex items-center px-3 py-2 bg-slate-800 text-slate-400 rounded-xl text-sm whitespace-nowrap">
+                    <span className="hidden sm:flex items-center px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium whitespace-nowrap shadow-inner">
                         {processedTransactions.length} shown
                     </span>
                 </div>
@@ -203,23 +203,23 @@ const TransactionList = () => {
             {/* Table */}
             <div className="flex-1 overflow-auto">
                 <table className="min-w-full">
-                    <thead className="bg-slate-900 sticky top-0 z-10">
+                    <thead className="bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 border-b border-slate-200 dark:border-white/5">
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-300 select-none" onClick={() => requestSort('transaction_date')}>
+                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 select-none" onClick={() => requestSort('transaction_date')}>
                                 Date {getSortIcon('transaction_date')}
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-300 select-none" onClick={() => requestSort('description')}>
+                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 select-none" onClick={() => requestSort('description')}>
                                 Description {getSortIcon('description')}
                             </th>
-                            <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-300 select-none" onClick={() => requestSort('amount')}>
+                            <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 select-none" onClick={() => requestSort('amount')}>
                                 Amount {getSortIcon('amount')}
                             </th>
-                            <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider">
                                 Doc
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                         {processedTransactions.length === 0 ? (
                             <tr>
                                 <td colSpan="4" className="px-6 py-16 text-center text-slate-500 text-sm">
@@ -230,12 +230,12 @@ const TransactionList = () => {
                             </tr>
                         ) : (
                             processedTransactions.map((tx) => (
-                                <tr key={tx.id} className="hover:bg-white/3 transition-colors group">
-                                    <td className="px-6 py-3.5 whitespace-nowrap text-sm text-slate-300 font-mono">
+                                <tr key={tx.id} className="hover:bg-slate-100/50 dark:hover:bg-white/3 transition-colors group">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 font-mono">
                                         {tx.transaction_date}
                                     </td>
-                                    <td className="px-6 py-3.5 text-sm text-slate-300 max-w-xs">
-                                        <span className="truncate block" title={tx.description}>{tx.description}</span>
+                                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 max-w-xs">
+                                        <span className="truncate block font-medium" title={tx.description}>{tx.description}</span>
                                     </td>
                                     <td className={`px-6 py-3.5 whitespace-nowrap text-sm text-right font-bold tabular-nums ${parseFloat(tx.amount) < 0 ? 'text-red-400' : 'text-green-400'}`}>
                                         {parseFloat(tx.amount) < 0 ? '-' : '+'}${Math.abs(parseFloat(tx.amount)).toFixed(2)}

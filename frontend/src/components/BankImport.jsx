@@ -55,8 +55,8 @@ const BankImport = () => {
     return (
         <div className="max-w-xl mx-auto p-6">
             <div className="mb-6">
-                <h1 className="text-xl font-bold text-white">Import Bank Statement</h1>
-                <p className="text-slate-400 text-sm mt-1">Upload a CSV file exported from your bank.</p>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Import Bank Statement</h1>
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Upload a CSV file exported from your bank.</p>
             </div>
 
             {/* Drop zone */}
@@ -67,8 +67,8 @@ const BankImport = () => {
                 onDrop={handleDrop}
                 className={`flex flex-col items-center justify-center w-full h-52 rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-200
                     ${dragOver
-                        ? 'border-indigo-400 bg-indigo-500/10'
-                        : 'border-white/15 bg-white/3 hover:border-indigo-500/50 hover:bg-indigo-500/5'
+                        ? 'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-500/10'
+                        : 'border-slate-300 dark:border-white/15 bg-white dark:bg-white/3 hover:border-indigo-600 dark:hover:border-indigo-500/50 hover:bg-slate-50 dark:hover:bg-indigo-500/5'
                     }
                     ${uploading ? 'pointer-events-none opacity-60' : ''}
                 `}
@@ -91,14 +91,14 @@ const BankImport = () => {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-3 text-center px-6">
-                        <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-                            <svg className="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 dark:bg-indigo-600/20 flex items-center justify-center">
+                            <svg className="w-7 h-7 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
                         </div>
                         <div>
-                            <p className="text-white font-medium text-sm">
-                                Drop your CSV here, or <span className="text-indigo-400 underline underline-offset-2">browse</span>
+                            <p className="text-slate-900 dark:text-white font-semibold text-sm">
+                                Drop your CSV here, or <span className="text-indigo-600 dark:text-indigo-400 underline underline-offset-2">browse</span>
                             </p>
                             <p className="text-slate-500 text-xs mt-1">Supports most bank export formats (Date, Description, Amount columns)</p>
                         </div>
@@ -108,10 +108,10 @@ const BankImport = () => {
 
             {/* Feedback message */}
             {message && (
-                <div className={`mt-4 flex items-start gap-3 p-4 rounded-xl text-sm border
+                <div className={`mt-4 flex items-start gap-3 p-4 rounded-xl text-sm border shadow-sm
                     ${message.type === 'success'
-                        ? 'bg-green-500/10 border-green-500/20 text-green-300'
-                        : 'bg-red-500/10 border-red-500/20 text-red-300'
+                        ? 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-300'
+                        : 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-300'
                     }`}
                 >
                     {message.type === 'success' ? (
@@ -128,9 +128,13 @@ const BankImport = () => {
             )}
 
             {/* Format hints */}
-            <div className="mt-6 p-4 bg-white/3 border border-white/8 rounded-xl">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Supported Format</p>
-                <p className="text-slate-500 text-xs">The importer auto-detects columns containing <span className="text-slate-300 font-mono">date</span>, <span className="text-slate-300 font-mono">description</span>, and <span className="text-slate-300 font-mono">amount</span> keywords — works with Chase, Bank of America, Wells Fargo and most major banks.</p>
+            <div className="mt-8 p-5 bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/8 rounded-2xl shadow-inner">
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Supported Format</p>
+                <p className="text-slate-600 dark:text-slate-500 text-sm leading-relaxed">
+                    The importer auto-detects columns containing <span className="text-slate-900 dark:text-slate-300 font-mono font-semibold">date</span>, 
+                    <span className="text-slate-900 dark:text-slate-300 font-mono font-semibold">description</span>, and 
+                    <span className="text-slate-900 dark:text-slate-300 font-mono font-semibold">amount</span> keywords. Works with most major banks.
+                </p>
             </div>
         </div>
     );
