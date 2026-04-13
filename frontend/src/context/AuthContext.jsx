@@ -47,15 +47,21 @@ export function AuthProvider({ children }) {
   // login — POST credentials, store token in memory, set user state
   // ---------------------------------------------------------------------------
   const login = useCallback(async (email, password) => {
-    const { data } = await axios.post(AUTH_LOGIN, { email, password }, { withCredentials: true });
+    try {
+      const { data } = await axios.post(AUTH_LOGIN, { email, password }, { withCredentials: true });
 
-    if (!data.success) {
-      throw new Error(data.error || 'Login failed');
+      if (!data.success) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      setAccessToken(data.access_token);
+      setUser(data.user);
+      return data.user;
+    } catch (err) {
+      // Extract server error message if available
+      const serverError = err.response?.data?.error || err.message || 'Login failed';
+      throw new Error(serverError);
     }
-
-    setAccessToken(data.access_token);
-    setUser(data.user);
-    return data.user;
   }, []);
 
   // ---------------------------------------------------------------------------

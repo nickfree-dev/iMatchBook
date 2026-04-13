@@ -44,9 +44,19 @@ $stmt = $db->prepare('SELECT id, name, email, password_hash FROM users WHERE ema
 $stmt->execute([':email' => $email]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user || !password_verify($pass, $user['password_hash'])) {
+if (!$user) {
+    error_log("Login failed: User not found for email: $email");
     http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+    echo json_encode(['success' => false, 'error' => 'Invalid email or password. (User not found)']);
+    exit;
+}
+
+if (!password_verify($pass, $user['password_hash'])) {
+    error_log("Login failed: Password mismatch for email: $email");
+    // Debug: log the hash we're checking against (remove in production!)
+    error_log("Debug Hash in DB: " . $user['password_hash']);
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Invalid email or password. (Password mismatch)']);
     exit;
 }
 

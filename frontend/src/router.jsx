@@ -13,6 +13,8 @@ import LoginPage       from './pages/LoginPage';
 const TransactionList = lazy(() => import('./components/TransactionList'));
 const BankImport      = lazy(() => import('./components/BankImport'));
 const CameraCapture   = lazy(() => import('./components/CameraCapture'));
+const PropertiesPage  = lazy(() => import('./pages/PropertiesPage'));
+const DocumentsPage   = lazy(() => import('./pages/DocumentsPage'));
 
 // Simple loading fallback used by Suspense
 const PageLoader = () => (
@@ -59,6 +61,22 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<PageLoader />}>
                 <CameraCapture />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'properties',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <PropertiesPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'documents',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <DocumentsPage />
               </Suspense>
             ),
           },

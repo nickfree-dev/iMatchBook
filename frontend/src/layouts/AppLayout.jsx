@@ -36,13 +36,30 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    to: '/documents',
+    label: 'Documents',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+      </svg>
+    ),
+  },
+  {
+    to: '/properties',
+    label: 'Properties',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        <polyline strokeLinecap="round" strokeLinejoin="round" points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+  },
 ];
 
 const comingSoonItems = [
   { label: 'Dashboard', icon: '📊' },
-  { label: 'Documents', icon: '📁' },
   { label: 'Reports',   icon: '📈' },
-  { label: 'Properties', icon: '🏘️' },
 ];
 
 export default function AppLayout() {
