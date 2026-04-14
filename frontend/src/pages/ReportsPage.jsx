@@ -112,7 +112,11 @@ function PLReport({ properties }) {
                   <tr key={i}>
                     <td className="px-5 py-2.5 text-slate-700 dark:text-slate-300 font-medium flex items-center gap-2">
                       {r.color && <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: r.color }} />}
-                      {r.category}
+                      {r.sub_category ? (
+                          <span>{r.main_category} <span className="text-slate-400 font-normal text-xs ml-1">({r.sub_category})</span></span>
+                      ) : (
+                          r.main_category || r.category
+                      )}
                     </td>
                     <td className="px-5 py-2.5 text-slate-400 text-xs">{r.schedule_e_line || '—'}</td>
                     <td className="px-5 py-2.5 text-right font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{fmt(r.total)}</td>
@@ -147,7 +151,11 @@ function PLReport({ properties }) {
                   <tr key={i}>
                     <td className="px-5 py-2.5 text-slate-700 dark:text-slate-300 font-medium flex items-center gap-2">
                       {r.color && <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: r.color }} />}
-                      {r.category}
+                      {r.sub_category ? (
+                          <span>{r.main_category} <span className="text-slate-400 font-normal text-xs ml-1">({r.sub_category})</span></span>
+                      ) : (
+                          r.main_category || r.category
+                      )}
                     </td>
                     <td className="px-5 py-2.5 text-slate-400 text-xs">{r.schedule_e_line || '—'}</td>
                     <td className="px-5 py-2.5 text-right font-bold text-red-500 dark:text-red-400 tabular-nums">{fmt(r.total)}</td>

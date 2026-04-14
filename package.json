@@ -6,5 +6,8 @@
     "build": "npm --prefix frontend run build",
     "install-all": "npm install --prefix frontend && docker compose exec backend bash -c 'cd backend && composer update'",
     "migrate": "docker compose exec backend php /var/www/html/backend/migrate_006.php"
+  },
+  "dependencies": {
+    "i": "^0.3.7"
   }
 }

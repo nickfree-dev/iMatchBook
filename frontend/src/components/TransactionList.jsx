@@ -1,11 +1,117 @@
 // src/components/TransactionList.jsx
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import api from '../services/api';
 
 const BASE_URL = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
 
+/* ─── Cascading Category Select ───────────────────────────────────── */
+function CascadingCategorySelect({ txCategory, categories, onSelect }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hoveredMain, setHoveredMain] = useState(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [isOpen]);
+
+  const mainCategories = useMemo(() => categories.filter(c => !c.parent_id), [categories]);
+
+  // Derived display values
+  const mainName = txCategory?.parent_id ? categories.find(c => c.id == txCategory.parent_id)?.name : txCategory?.name;
+  const subName = txCategory?.parent_id ? txCategory.name : null;
+
+  return (
+    <div className="relative inline-block text-left w-full max-w-[160px]" ref={containerRef} onClick={e => e.stopPropagation()}>
+      <div 
+        onClick={() => setIsOpen(!isOpen)} 
+        className="cursor-pointer px-2 py-1.5 border border-transparent hover:border-slate-200 dark:hover:border-white/10 rounded-lg transition-colors flex items-center justify-between group"
+      >
+        {txCategory ? (
+          <div className="flex flex-col text-left">
+            <span className="font-semibold text-xs leading-tight" style={{ color: txCategory.color }}>
+              {mainName}
+            </span>
+            {subName && (
+              <span className="text-[10px] text-slate-400 font-normal leading-tight mt-0.5 max-w-[120px] truncate" title={subName}>{subName}</span>
+            )}
+          </div>
+        ) : (
+          <span className="text-slate-400 italic text-xs">Unassigned</span>
+        )}
+        <svg className={`w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-all ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      {isOpen && (
+        <div className="absolute z-50 top-full left-0 mt-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-white/10 py-1.5 overflow-visible">
+          <div 
+             className="px-4 py-2 text-xs text-slate-500 font-semibold italic hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer"
+             onClick={() => { onSelect(null); setIsOpen(false); }}
+          >
+             Clear Category
+          </div>
+          {mainCategories.map(main => {
+            const subs = categories.filter(c => c.parent_id == main.id);
+            const hasSubs = subs.length > 0;
+            return (
+              <div 
+                key={main.id} 
+                className="relative group/main"
+                onMouseEnter={() => setHoveredMain(main.id)}
+                onMouseLeave={() => setHoveredMain(null)}
+              >
+                <div 
+                  className={`px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer flex justify-between items-center ${hoveredMain === main.id ? 'bg-slate-50 dark:bg-white/5' : ''}`}
+                  onClick={() => {
+                    if (!hasSubs) {
+                      onSelect(main.id);
+                      setIsOpen(false);
+                    }
+                  }}
+                >
+                  <span style={{ color: main.color }} className="font-medium truncate">{main.name}</span>
+                  {hasSubs && <span className="text-slate-400">›</span>}
+                </div>
+                
+                {/* Secondary Popout */}
+                {hasSubs && hoveredMain === main.id && (
+                  <div className="absolute left-full top-0 ml-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-white/10 py-1.5 z-[60]">
+                    <div 
+                       className="px-4 py-2 text-xs text-slate-500 font-medium italic hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer"
+                       onClick={() => { onSelect(main.id); setIsOpen(false); }}
+                    >
+                       {main.name} (General)
+                    </div>
+                    {subs.map(sub => (
+                      <div
+                        key={sub.id}
+                        className="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer truncate"
+                        title={sub.name}
+                        onClick={() => { onSelect(sub.id); setIsOpen(false); }}
+                      >
+                        {sub.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Transaction Detail Drawer ─────────────────────────────────── */
-function TransactionDrawer({ tx, properties, categories, onClose, onUpdate, onDelete }) {
+function TransactionDrawer({ tx, transactions, properties, categories, onClose, onUpdate, onDelete }) {
   const [notes, setNotes] = useState(tx.notes || '');
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -18,7 +124,10 @@ function TransactionDrawer({ tx, properties, categories, onClose, onUpdate, onDe
   };
 
   const amount = parseFloat(tx.amount);
-  const isExpense = amount < 0;
+  const txCategory = categories.find(c => c.id == tx.category_id);
+  const isTransfer = tx.category_type === 'transfer' || txCategory?.type === 'transfer';
+  const isExpense = amount < 0 && !isTransfer;
+  const isIncome = amount > 0 && !isTransfer;
   const imageSrc = tx.receipt_path ? `${BASE_URL}/${tx.receipt_path}` : null;
 
   return (
@@ -46,8 +155,8 @@ function TransactionDrawer({ tx, properties, categories, onClose, onUpdate, onDe
         <div className="flex-1 overflow-auto p-5 space-y-5">
           {/* Badges row */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isExpense ? 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400' : 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'}`}>
-              {isExpense ? 'Expense' : 'Income'}
+            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isTransfer ? 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300' : amount < 0 ? 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400' : 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'}`}>
+              {isTransfer ? 'Transfer' : amount < 0 ? 'Expense' : 'Income'}
             </span>
             {tx.receipt_id || tx.receipt_path ? (
               <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400">
@@ -78,18 +187,61 @@ function TransactionDrawer({ tx, properties, categories, onClose, onUpdate, onDe
             </select>
           </div>
 
-          {/* Category */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Category</label>
-            <select
-              className="w-full px-3 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-              value={tx.category_id || ''}
-              onChange={e => onUpdate(tx.id, { category_id: e.target.value || null })}
-            >
-              <option value="">Unassigned</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
+          {/* Category Hierarchy */}
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Main Category</label>
+              <select
+                className="w-full px-3 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                value={(txCategory?.parent_id ? txCategory.parent_id : txCategory?.id) || ''}
+                onChange={e => onUpdate(tx.id, { category_id: e.target.value || null })}
+              >
+                <option value="">Unassigned</option>
+                {categories.filter(c => !c.parent_id).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            {(txCategory?.parent_id ? txCategory.parent_id : txCategory?.id) ? (
+                categories.some(c => c.parent_id == (txCategory?.parent_id ? txCategory.parent_id : txCategory?.id)) && (
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Subcategory (Optional)</label>
+                    <select
+                      className="w-full px-3 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                      value={txCategory?.parent_id ? txCategory.id : ''}
+                      onChange={e => onUpdate(tx.id, { category_id: e.target.value || (txCategory?.parent_id ? txCategory.parent_id : txCategory?.id) })}
+                    >
+                      <option value="">None</option>
+                      {categories.filter(c => c.parent_id == (txCategory?.parent_id ? txCategory.parent_id : txCategory?.id)).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                  </div>
+                )
+            ) : null}
           </div>
+
+          {/* Linked Transfer */}
+          {isTransfer && (
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Linked Transfer</label>
+              <select
+                className="w-full px-3 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                value={tx.linked_transaction_id || ''}
+                onChange={async e => {
+                    const linkedId = e.target.value || null;
+                    await onUpdate(tx.id, { linked_transaction_id: linkedId });
+                    // Also auto-link the other transaction back if selected
+                    if (linkedId) {
+                        await onUpdate(linkedId, { linked_transaction_id: tx.id });
+                    }
+                }}
+              >
+                <option value="">Unlinked</option>
+                {transactions
+                  .filter(t => t.id !== tx.id && (parseFloat(t.amount) === (amount * -1) || t.id === tx.linked_transaction_id))
+                  .map(t => (
+                    <option key={t.id} value={t.id}>{t.transaction_date} - {t.description} ({parseFloat(t.amount) > 0 ? '+' : '-'}${Math.abs(t.amount).toFixed(2)})</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Reviewed toggle */}
           <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/8">
@@ -188,7 +340,7 @@ const TransactionList = () => {
 
     // UI State
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterType, setFilterType] = useState('all'); // all, income, expense
+    const [filterType, setFilterType] = useState('all'); // all, income, expense, transfer
     const [filterProperty, setFilterProperty] = useState('all');
     const [filterCategory, setFilterCategory] = useState('all');
     const [filterMatched, setFilterMatched] = useState('all'); // all, matched, unmatched
@@ -298,8 +450,11 @@ const TransactionList = () => {
         if (filterType !== 'all') {
             data = data.filter(t => {
                 const amount = parseFloat(t.amount);
-                if (filterType === 'income') return amount > 0;
-                if (filterType === 'expense') return amount < 0;
+                const txCategory = categories.find(c => c.id == t.category_id);
+                const isTransfer = t.category_type === 'transfer' || txCategory?.type === 'transfer';
+                if (filterType === 'transfer') return isTransfer;
+                if (filterType === 'income') return amount > 0 && !isTransfer;
+                if (filterType === 'expense') return amount < 0 && !isTransfer;
                 return true;
             });
         }
@@ -345,8 +500,8 @@ const TransactionList = () => {
             : <span className="ml-1 text-indigo-400">↓</span>;
     };
 
-    const totalIncome  = processedTransactions.filter(t => parseFloat(t.amount) > 0).reduce((s, t) => s + parseFloat(t.amount), 0);
-    const totalExpense = processedTransactions.filter(t => parseFloat(t.amount) < 0).reduce((s, t) => s + parseFloat(t.amount), 0);
+    const totalIncome  = processedTransactions.filter(t => parseFloat(t.amount) > 0 && t.category_type !== 'transfer').reduce((s, t) => s + parseFloat(t.amount), 0);
+    const totalExpense = processedTransactions.filter(t => parseFloat(t.amount) < 0 && t.category_type !== 'transfer').reduce((s, t) => s + parseFloat(t.amount), 0);
     const net          = totalIncome + totalExpense;
     const matchedCount = transactions.filter(t => t.receipt_id || t.receipt_path).length;
 
@@ -447,6 +602,7 @@ const TransactionList = () => {
                         <option value="all">All Types</option>
                         <option value="income">Income (+)</option>
                         <option value="expense">Expenses (-)</option>
+                        <option value="transfer">Transfers</option>
                     </select>
                 </div>
 
@@ -511,6 +667,8 @@ const TransactionList = () => {
                             processedTransactions.map((tx) => {
                                 const amount = parseFloat(tx.amount);
                                 const hasDoc = !!(tx.receipt_id || tx.receipt_path);
+                                const txCategory = categories.find(c => c.id == tx.category_id);
+                                const isTransfer = tx.category_type === 'transfer' || txCategory?.type === 'transfer';
                                 return (
                                     <tr
                                         key={tx.id}
@@ -536,21 +694,16 @@ const TransactionList = () => {
                                                 ))}
                                             </select>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm" onClick={e => e.stopPropagation()}>
-                                            <select 
-                                                className="bg-transparent border-none focus:ring-0 text-slate-600 dark:text-slate-400 text-xs cursor-pointer hover:text-indigo-500 max-w-[120px]"
-                                                style={tx.category_color ? { color: tx.category_color } : {}}
-                                                value={tx.category_id || ''}
-                                                onChange={(e) => handleUpdateTransaction(tx.id, { category_id: e.target.value || null })}
-                                            >
-                                                <option value="">Unassigned</option>
-                                                {categories.map(c => (
-                                                    <option key={c.id} value={c.id} style={{ color: c.color }}>{c.name}</option>
-                                                ))}
-                                            </select>
+                                        <td className="px-6 py-2 whitespace-nowrap align-middle">
+                                            <CascadingCategorySelect 
+                                                txCategory={txCategory} 
+                                                categories={categories}
+                                                onSelect={(categoryId) => handleUpdateTransaction(tx.id, { category_id: categoryId })}
+                                            />
                                         </td>
-                                        <td className={`px-6 py-3.5 whitespace-nowrap text-sm text-right font-bold tabular-nums ${amount < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                        <td className={`px-6 py-3.5 whitespace-nowrap text-sm text-right font-bold tabular-nums ${isTransfer ? 'text-slate-500 dark:text-slate-400' : amount < 0 ? 'text-red-400' : 'text-green-400'}`}>
                                             {amount < 0 ? '-' : '+'}${Math.abs(amount).toFixed(2)}
+                                            {isTransfer && <span className="ml-1.5 text-[10px] font-normal inline-flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded px-1.5 py-0.5 opacity-80 title='Transfer'">🔁</span>}
                                         </td>
                                         <td className="px-6 py-3.5 whitespace-nowrap text-center" onClick={e => e.stopPropagation()}>
                                             {hasDoc ? (
@@ -580,6 +733,7 @@ const TransactionList = () => {
             {selectedTx && (
                 <TransactionDrawer
                     tx={selectedTx}
+                    transactions={transactions}
                     properties={properties}
                     categories={categories}
                     onClose={() => setSelectedTx(null)}

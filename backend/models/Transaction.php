@@ -13,7 +13,7 @@ class Transaction {
      * Get transactions with optional filtering
      */
     public function getAll($userId, $filters = []) {
-        $sql = "SELECT t.*, p.name as property_name, c.name as category_name, c.color as category_color 
+        $sql = "SELECT t.*, p.name as property_name, c.name as category_name, c.color as category_color, c.type as category_type 
                 FROM " . $this->table . " t
                 LEFT JOIN properties p ON t.property_id = p.id
                 LEFT JOIN categories c ON t.category_id = c.id
@@ -65,7 +65,7 @@ class Transaction {
         $params = [':id' => $id, ':user_id' => $userId];
 
         // Allowed fields for update
-        $allowed = ['property_id', 'category_id', 'notes', 'is_reviewed', 'receipt_id'];
+        $allowed = ['property_id', 'category_id', 'notes', 'is_reviewed', 'receipt_id', 'linked_transaction_id'];
 
         foreach ($allowed as $field) {
             if (array_key_exists($field, $data)) {

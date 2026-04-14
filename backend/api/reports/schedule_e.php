@@ -66,17 +66,19 @@ foreach ($properties as $prop) {
 
     // Get totals by schedule_e_line for this property & year
     $lineSql = "SELECT 
-        c.schedule_e_line,
+        COALESCE(c.schedule_e_line, parent.schedule_e_line) AS schedule_e_line,
         COALESCE(SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END), 0) AS income_total,
         COALESCE(SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END), 0) AS expense_total
     FROM bank_transactions t
     JOIN categories c ON t.category_id = c.id
+    LEFT JOIN categories parent ON c.parent_id = parent.id
     WHERE t.user_id = :uid 
       AND t.property_id = :pid
       AND YEAR(t.transaction_date) = :year
-      AND c.schedule_e_line IS NOT NULL
-      AND c.schedule_e_line != ''
-    GROUP BY c.schedule_e_line";
+      AND COALESCE(c.schedule_e_line, parent.schedule_e_line) IS NOT NULL
+      AND COALESCE(c.schedule_e_line, parent.schedule_e_line) != ''
+      AND c.type != 'transfer'
+    GROUP BY COALESCE(c.schedule_e_line, parent.schedule_e_line)";
 
     $lineStmt = $db->prepare($lineSql);
     $lineStmt->execute([':uid' => $userId, ':pid' => $pid, ':year' => $year]);

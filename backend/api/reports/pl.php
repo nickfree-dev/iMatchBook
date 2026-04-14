@@ -38,18 +38,22 @@ if ($propertyId) {
 
 // --- Income rows by category ---
 $incomeSql = "SELECT 
-    COALESCE(c.name, 'Uncategorized') AS category,
-    c.color,
-    c.schedule_e_line,
+    COALESCE(parent.name, c.name, 'Uncategorized') AS main_category,
+    CASE WHEN parent.id IS NOT NULL THEN c.name ELSE NULL END AS sub_category,
+    COALESCE(parent.name, c.name, 'Uncategorized') AS category,
+    COALESCE(parent.color, c.color) AS color,
+    COALESCE(parent.schedule_e_line, c.schedule_e_line) AS schedule_e_line,
     COALESCE(SUM(t.amount), 0) AS total
 FROM bank_transactions t
 LEFT JOIN categories c ON t.category_id = c.id
+LEFT JOIN categories parent ON c.parent_id = parent.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
   AND t.amount > 0
+  AND (c.type != 'transfer' OR c.type IS NULL)
   $propFilter
-GROUP BY c.id, c.name, c.color, c.schedule_e_line
-ORDER BY total DESC";
+GROUP BY c.id, c.name, parent.id, parent.name, c.color, parent.color, c.schedule_e_line, parent.schedule_e_line
+ORDER BY main_category ASC, total DESC";
 
 $incomeStmt = $db->prepare($incomeSql);
 foreach ($params as $k => $v) $incomeStmt->bindValue($k, $v);
@@ -58,18 +62,22 @@ $incomeRows = $incomeStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // --- Expense rows by category ---
 $expenseSql = "SELECT 
-    COALESCE(c.name, 'Uncategorized') AS category,
-    c.color,
-    c.schedule_e_line,
+    COALESCE(parent.name, c.name, 'Uncategorized') AS main_category,
+    CASE WHEN parent.id IS NOT NULL THEN c.name ELSE NULL END AS sub_category,
+    COALESCE(parent.name, c.name, 'Uncategorized') AS category,
+    COALESCE(parent.color, c.color) AS color,
+    COALESCE(parent.schedule_e_line, c.schedule_e_line) AS schedule_e_line,
     COALESCE(SUM(ABS(t.amount)), 0) AS total
 FROM bank_transactions t
 LEFT JOIN categories c ON t.category_id = c.id
+LEFT JOIN categories parent ON c.parent_id = parent.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
   AND t.amount < 0
+  AND (c.type != 'transfer' OR c.type IS NULL)
   $propFilter
-GROUP BY c.id, c.name, c.color, c.schedule_e_line
-ORDER BY total DESC";
+GROUP BY c.id, c.name, parent.id, parent.name, c.color, parent.color, c.schedule_e_line, parent.schedule_e_line
+ORDER BY main_category ASC, total DESC";
 
 $expenseStmt = $db->prepare($expenseSql);
 foreach ($params as $k => $v) $expenseStmt->bindValue($k, $v);
@@ -82,8 +90,10 @@ $totalsSql = "SELECT
     COALESCE(SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END), 0) AS total_expenses,
     COALESCE(SUM(t.amount), 0) AS net
 FROM bank_transactions t
+LEFT JOIN categories c ON t.category_id = c.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
+  AND (c.type != 'transfer' OR c.type IS NULL)
   $propFilter";
 
 $totalsStmt = $db->prepare($totalsSql);
