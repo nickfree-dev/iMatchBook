@@ -11,7 +11,7 @@ import LoginPage       from './pages/LoginPage';
 
 // Lazy-load page components so each route is a separate code chunk
 const TransactionList = lazy(() => import('./components/TransactionList'));
-const BankImport      = lazy(() => import('./components/BankImport'));
+const ImportPage      = lazy(() => import('./pages/ImportPage'));
 const CameraCapture   = lazy(() => import('./components/CameraCapture'));
 const PropertiesPage  = lazy(() => import('./pages/PropertiesPage'));
 const DocumentsPage   = lazy(() => import('./pages/DocumentsPage'));
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
             path: 'import',
             element: (
               <Suspense fallback={<PageLoader />}>
-                <BankImport />
+                <ImportPage />
               </Suspense>
             ),
           },

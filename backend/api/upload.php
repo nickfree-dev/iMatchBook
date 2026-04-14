@@ -58,7 +58,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $fileNameCmps = explode(".", $fileName);
     $fileExtension = strtolower(end($fileNameCmps));
 
-    $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
+    $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg', 'pdf');
     if (in_array($fileExtension, $allowedfileExtensions)) {
         // Use unique name
         $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
@@ -175,9 +175,19 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 logDebug("Reading image file: " . $dest_path);
                 $imageData = file_get_contents($dest_path);
 
+                // Detect MIME type properly (browser may send wrong type for PDFs)
+                $detectedMime = $fileType;
+                if ($fileExtension === 'pdf') {
+                    $detectedMime = 'application/pdf';
+                } elseif (in_array($fileExtension, ['jpg', 'jpeg'])) {
+                    $detectedMime = 'image/jpeg';
+                } elseif ($fileExtension === 'png') {
+                    $detectedMime = 'image/png';
+                }
+
                 $rawDocument = new RawDocument();
                 $rawDocument->setContent($imageData);
-                $rawDocument->setMimeType($fileType);
+                $rawDocument->setMimeType($detectedMime);
 
                 $processRequest = new ProcessRequest();
                 $processRequest->setName($name);
