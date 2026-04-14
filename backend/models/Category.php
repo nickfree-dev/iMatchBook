@@ -11,7 +11,7 @@ class Category {
 
     public function getAll($userId) {
         // Return system categories (user_id IS NULL) + user specific categories
-        $query = "SELECT * FROM " . $this->table . " WHERE user_id = :user_id OR user_id IS NULL ORDER BY type DESC, name ASC";
+        $query = "SELECT * FROM " . $this->table . " WHERE user_id = :user_id OR user_id IS NULL ORDER BY id ASC";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':user_id', $userId);
         $stmt->execute();

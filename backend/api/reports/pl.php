@@ -50,7 +50,7 @@ LEFT JOIN categories parent ON c.parent_id = parent.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
   AND t.amount > 0
-  AND (c.type != 'transfer' OR c.type IS NULL)
+  AND c.type = 'income'
   $propFilter
 GROUP BY c.id, c.name, parent.id, parent.name, c.color, parent.color, c.schedule_e_line, parent.schedule_e_line
 ORDER BY main_category ASC, total DESC";
@@ -74,7 +74,7 @@ LEFT JOIN categories parent ON c.parent_id = parent.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
   AND t.amount < 0
-  AND (c.type != 'transfer' OR c.type IS NULL)
+  AND c.type = 'expense'
   $propFilter
 GROUP BY c.id, c.name, parent.id, parent.name, c.color, parent.color, c.schedule_e_line, parent.schedule_e_line
 ORDER BY main_category ASC, total DESC";
@@ -93,7 +93,7 @@ FROM bank_transactions t
 LEFT JOIN categories c ON t.category_id = c.id
 WHERE t.user_id = :user_id 
   AND t.transaction_date BETWEEN :date_from AND :date_to
-  AND (c.type != 'transfer' OR c.type IS NULL)
+  AND c.type IN ('income', 'expense')
   $propFilter";
 
 $totalsStmt = $db->prepare($totalsSql);

@@ -13,10 +13,11 @@ class Transaction {
      * Get transactions with optional filtering
      */
     public function getAll($userId, $filters = []) {
-        $sql = "SELECT t.*, p.name as property_name, c.name as category_name, c.color as category_color, c.type as category_type 
+        $sql = "SELECT t.*, p.name as property_name, c.name as category_name, c.color as category_color, c.type as category_type, a.name as account_name 
                 FROM " . $this->table . " t
                 LEFT JOIN properties p ON t.property_id = p.id
                 LEFT JOIN categories c ON t.category_id = c.id
+                LEFT JOIN accounts a ON t.account_id = a.id
                 WHERE t.user_id = :user_id";
         
         $params = [':user_id' => $userId];
@@ -65,7 +66,7 @@ class Transaction {
         $params = [':id' => $id, ':user_id' => $userId];
 
         // Allowed fields for update
-        $allowed = ['property_id', 'category_id', 'notes', 'is_reviewed', 'receipt_id', 'linked_transaction_id'];
+        $allowed = ['property_id', 'category_id', 'account_id', 'notes', 'is_reviewed', 'receipt_id', 'linked_transaction_id'];
 
         foreach ($allowed as $field) {
             if (array_key_exists($field, $data)) {
@@ -85,6 +86,42 @@ class Transaction {
         $sql = "DELETE FROM " . $this->table . " WHERE id = :id AND user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id, ':user_id' => $userId]);
+    }
+
+    /**
+     * Update multiple transactions at once
+     */
+    public function bulkUpdate($ids, $userId, $data) {
+        if (empty($ids)) return false;
+        
+        $fields = [];
+        $params = [':user_id' => $userId];
+
+        // Allowed fields for bulk update
+        $allowed = ['property_id', 'category_id', 'account_id', 'is_reviewed'];
+
+        foreach ($allowed as $field) {
+            if (array_key_exists($field, $data)) {
+                $fields[] = "$field = :$field";
+                $params[":$field"] = $data[$field];
+            }
+        }
+
+        if (empty($fields)) return false;
+
+        $idPlaceholders = [];
+        foreach ($ids as $index => $id) {
+            $placeholder = ":id$index";
+            $idPlaceholders[] = $placeholder;
+            $params[$placeholder] = $id;
+        }
+
+        $sql = "UPDATE " . $this->table . " 
+                SET " . implode(', ', $fields) . " 
+                WHERE user_id = :user_id AND id IN (" . implode(', ', $idPlaceholders) . ")";
+        
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
     }
 }
 ?>

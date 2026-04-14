@@ -38,6 +38,7 @@ $fileTmpPath = $_FILES['file']['tmp_name'];
 $fileName    = strtolower(trim($_FILES['file']['name']));
 $action      = strtolower(trim($_POST['action'] ?? 'preview')); // preview | commit
 $propertyId  = !empty($_POST['property_id']) ? (int)$_POST['property_id'] : null;
+$accountId   = !empty($_POST['account_id']) ? (int)$_POST['account_id'] : null;
 
 // Detect format from extension
 $ext = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -119,8 +120,8 @@ if ($action === 'commit') {
         $db->beginTransaction();
 
         $stmt = $db->prepare(
-            "INSERT INTO bank_transactions (user_id, transaction_date, description, amount, property_id, source)
-             VALUES (:user_id, :date, :desc, :amount, :property_id, :source)"
+            "INSERT INTO bank_transactions (user_id, transaction_date, description, amount, property_id, account_id, source)
+             VALUES (:user_id, :date, :desc, :amount, :property_id, :account_id, :source)"
         );
 
         $source = strtolower($ext); // 'csv' or 'qif'
@@ -133,6 +134,7 @@ if ($action === 'commit') {
                     ':desc'        => $row['description'],
                     ':amount'      => $row['amount'],
                     ':property_id' => $propertyId,
+                    ':account_id'  => $accountId,
                     ':source'      => $source,
                 ]);
                 $imported++;

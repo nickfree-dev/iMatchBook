@@ -69,8 +69,42 @@ function BankImportTab({ properties }) {
   const [importing, setImporting] = useState(false);
   const [stage, setStage] = useState('drop');       // drop | parsing | preview | committing | done | error
   const [propertyId, setPropertyId] = useState('');
+  const [accounts, setAccounts] = useState([]);
+  const [accountId, setAccountId] = useState('');
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [newAccountName, setNewAccountName] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
+
+  const fetchAccounts = async () => {
+    try {
+      const { data } = await api.get('/backend/api/accounts/index.php');
+      if (data.success) setAccounts(data.data);
+    } catch (err) {
+      console.error('Failed to fetch accounts', err);
+    }
+  };
+
+  const handleAddAccount = async () => {
+    if (!newAccountName.trim()) return;
+    try {
+      const { data } = await api.post('/backend/api/accounts/create.php', { name: newAccountName });
+      if (data.success) {
+        setAccounts(prev => [...prev, data.data]);
+        setAccountId(data.data.id);
+        setShowAddAccount(false);
+        setNewAccountName('');
+      } else {
+        alert(data.error || 'Failed to create account');
+      }
+    } catch (err) {
+      alert('Network error while creating account');
+    }
+  };
 
   const reset = () => {
     setFile(null); setFormat(null); setPreview(null);
@@ -119,6 +153,7 @@ function BankImportTab({ properties }) {
     fd.append('file', file);
     fd.append('action', 'commit');
     if (propertyId) fd.append('property_id', propertyId);
+    if (accountId) fd.append('account_id', accountId);
 
     try {
       const { data } = await api.post('/backend/api/transactions/import.php', fd, {
@@ -195,19 +230,64 @@ function BankImportTab({ properties }) {
             </button>
           </div>
 
-          {/* Property assignment */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              Assign to Property <span className="text-slate-400 font-normal">(optional)</span>
-            </label>
-            <select
-              value={propertyId}
-              onChange={e => setPropertyId(e.target.value)}
-              className="w-full px-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-            >
-              <option value="">— No property (assign later) —</option>
-              {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
+          {/* Property & Account assignment */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Assign to Property <span className="text-slate-400 font-normal">(optional)</span>
+              </label>
+              <select
+                value={propertyId}
+                onChange={e => setPropertyId(e.target.value)}
+                className="w-full px-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
+              >
+                <option value="">— No property (assign later) —</option>
+                {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  Select Account <span className="text-red-500">*</span>
+                </label>
+                <button 
+                  onClick={() => setShowAddAccount(!showAddAccount)}
+                  className="text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:underline"
+                >
+                  {showAddAccount ? 'Cancel' : '+ New Account'}
+                </button>
+              </div>
+              
+              {!showAddAccount ? (
+                <select
+                  value={accountId}
+                  onChange={e => setAccountId(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
+                  required
+                >
+                  <option value="">— Select source account —</option>
+                  {accounts.map(a => <option key={a.id} value={a.id}>{a.name} {a.last_4 ? `(****${a.last_4})` : ''}</option>)}
+                </select>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="e.g. Chase Business"
+                    className="flex-1 px-4 py-2.5 bg-white dark:bg-white/5 border border-indigo-200 dark:border-indigo-500/30 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    value={newAccountName}
+                    onChange={e => setNewAccountName(e.target.value)}
+                    autoFocus
+                  />
+                  <button 
+                    onClick={handleAddAccount}
+                    className="px-3 bg-indigo-600 text-white rounded-xl text-xs font-bold"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Preview table */}
@@ -251,7 +331,7 @@ function BankImportTab({ properties }) {
             </button>
             <button
               onClick={handleCommit}
-              disabled={importing}
+              disabled={importing || !accountId}
               className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md transition-all disabled:opacity-60"
             >
               {importing ? (

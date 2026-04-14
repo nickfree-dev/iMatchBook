@@ -22,6 +22,16 @@ function CascadingCategorySelect({ txCategory, categories, onSelect }) {
 
   const mainCategories = useMemo(() => categories.filter(c => !c.parent_id), [categories]);
 
+  const groupedCategories = useMemo(() => {
+    const groups = {
+      'Income': mainCategories.filter(c => c.type === 'income'),
+      'Expenses': mainCategories.filter(c => c.type === 'expense'),
+      'Transfers': mainCategories.filter(c => c.type === 'transfer'),
+      'Capital Improvements': mainCategories.filter(c => c.type === 'capital')
+    };
+    return groups;
+  }, [mainCategories]);
+
   // Derived display values
   const mainName = txCategory?.parent_id ? categories.find(c => c.id == txCategory.parent_id)?.name : txCategory?.name;
   const subName = txCategory?.parent_id ? txCategory.name : null;
@@ -34,11 +44,11 @@ function CascadingCategorySelect({ txCategory, categories, onSelect }) {
       >
         {txCategory ? (
           <div className="flex flex-col text-left">
-            <span className="font-semibold text-xs leading-tight" style={{ color: txCategory.color }}>
+            <span className="font-semibold text-xs leading-tight text-slate-700 dark:text-slate-200">
               {mainName}
             </span>
             {subName && (
-              <span className="text-[10px] text-slate-400 font-normal leading-tight mt-0.5 max-w-[120px] truncate" title={subName}>{subName}</span>
+              <span className="text-[10px] text-slate-500 font-normal leading-tight mt-0.5 max-w-[120px] truncate" title={subName}>{subName}</span>
             )}
           </div>
         ) : (
@@ -50,60 +60,64 @@ function CascadingCategorySelect({ txCategory, categories, onSelect }) {
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 top-full left-0 mt-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-white/10 py-1.5 overflow-visible">
+        <div className="absolute z-50 top-full left-0 mt-1 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-white/10 py-2">
           <div 
-             className="px-4 py-2 text-xs text-slate-500 font-semibold italic hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer"
+             className="px-4 py-1.5 text-[10px] text-red-500 uppercase tracking-widest font-bold hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer"
              onClick={() => { onSelect(null); setIsOpen(false); }}
           >
-             Clear Category
+             ✕ Clear Category
           </div>
-          {mainCategories.map(main => {
-            const subs = categories.filter(c => c.parent_id == main.id);
-            const hasSubs = subs.length > 0;
-            return (
-              <div 
-                key={main.id} 
-                className="relative group/main"
-                onMouseEnter={() => setHoveredMain(main.id)}
-                onMouseLeave={() => setHoveredMain(null)}
-              >
-                <div 
-                  className={`px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer flex justify-between items-center ${hoveredMain === main.id ? 'bg-slate-50 dark:bg-white/5' : ''}`}
-                  onClick={() => {
-                    if (!hasSubs) {
-                      onSelect(main.id);
-                      setIsOpen(false);
-                    }
-                  }}
-                >
-                  <span style={{ color: main.color }} className="font-medium truncate">{main.name}</span>
-                  {hasSubs && <span className="text-slate-400">›</span>}
-                </div>
-                
-                {/* Secondary Popout */}
-                {hasSubs && hoveredMain === main.id && (
-                  <div className="absolute left-full top-0 ml-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-white/10 py-1.5 z-[60]">
+          
+          {Object.entries(groupedCategories).map(([groupName, items], gIdx) => (
+            <React.Fragment key={groupName}>
+              {gIdx > 0 && <div className="mx-2 my-2 border-t border-slate-100 dark:border-white/5" />}
+              
+              {items.map(main => {
+                const subs = categories.filter(c => c.parent_id == main.id);
+                const hasSubs = subs.length > 0;
+                return (
+                  <div 
+                    key={main.id} 
+                    className="relative"
+                    onMouseEnter={() => setHoveredMain(main.id)}
+                    onMouseLeave={() => setHoveredMain(null)}
+                  >
                     <div 
-                       className="px-4 py-2 text-xs text-slate-500 font-medium italic hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer"
-                       onClick={() => { onSelect(main.id); setIsOpen(false); }}
+                      className={`px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer flex justify-between items-center ${hoveredMain === main.id ? 'bg-slate-100 dark:bg-white/5' : ''}`}
+                      onClick={() => {
+                        onSelect(main.id);
+                        setIsOpen(false);
+                      }}
                     >
-                       {main.name} (General)
+                      <span className="font-semibold truncate text-slate-700 dark:text-slate-200">{main.name}</span>
+                      {hasSubs && <span className="text-slate-400">›</span>}
                     </div>
-                    {subs.map(sub => (
-                      <div
-                        key={sub.id}
-                        className="px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer truncate"
-                        title={sub.name}
-                        onClick={() => { onSelect(sub.id); setIsOpen(false); }}
-                      >
-                        {sub.name}
+                    
+                    {/* Secondary Popout */}
+                    {hasSubs && hoveredMain === main.id && (
+                      <div className="absolute left-full top-0 ml-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-white/10 py-2 z-[100]">
+                        <div 
+                           className="px-4 py-1 text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1"
+                        >
+                           {main.name} Subcategories
+                        </div>
+                        {subs.map(sub => (
+                          <div
+                            key={sub.id}
+                            className="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer truncate"
+                            title={sub.name}
+                            onClick={() => { onSelect(sub.id); setIsOpen(false); }}
+                          >
+                            {sub.name}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </React.Fragment>
+          ))}
         </div>
       )}
     </div>
@@ -111,7 +125,7 @@ function CascadingCategorySelect({ txCategory, categories, onSelect }) {
 }
 
 /* ─── Transaction Detail Drawer ─────────────────────────────────── */
-function TransactionDrawer({ tx, transactions, properties, categories, onClose, onUpdate, onDelete }) {
+function TransactionDrawer({ tx, transactions, properties, categories, accounts, onClose, onUpdate, onDelete }) {
   const [notes, setNotes] = useState(tx.notes || '');
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -184,6 +198,19 @@ function TransactionDrawer({ tx, transactions, properties, categories, onClose, 
             >
               <option value="">Unassigned</option>
               {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+
+          {/* Account */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Account</label>
+            <select
+              className="w-full px-3 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              value={tx.account_id || ''}
+              onChange={e => onUpdate(tx.id, { account_id: e.target.value || null })}
+            >
+              <option value="">Unaccounted</option>
+              {accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
 
@@ -331,10 +358,11 @@ function TransactionDrawer({ tx, transactions, properties, categories, onClose, 
 }
 
 /* ─── Main Component ─────────────────────────────────────────────── */
-const TransactionList = () => {
+const TransactionList = ({ globalPropertyFilter = 'all' }) => {
     const [transactions, setTransactions] = useState([]);
     const [properties, setProperties] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -343,9 +371,11 @@ const TransactionList = () => {
     const [filterType, setFilterType] = useState('all'); // all, income, expense, transfer
     const [filterProperty, setFilterProperty] = useState('all');
     const [filterCategory, setFilterCategory] = useState('all');
+    const [filterAccount, setFilterAccount] = useState('all');
     const [filterMatched, setFilterMatched] = useState('all'); // all, matched, unmatched
     const [sortConfig, setSortConfig] = useState({ key: 'transaction_date', direction: 'desc' });
     const [selectedTx, setSelectedTx] = useState(null); // drawer
+    const [selectedIds, setSelectedIds] = useState(new Set());
 
     const fetchTransactions = async () => {
         setLoading(true);
@@ -354,6 +384,7 @@ const TransactionList = () => {
             const params = new URLSearchParams();
             if (filterProperty !== 'all') params.append('property_id', filterProperty);
             if (filterCategory !== 'all') params.append('category_id', filterCategory);
+            if (filterAccount !== 'all') params.append('account_id', filterAccount);
 
             const { data } = await api.get(`/backend/api/get_bank_transactions.php?${params.toString()}`);
             if (data.success) {
@@ -370,12 +401,14 @@ const TransactionList = () => {
 
     const fetchMetaData = async () => {
         try {
-            const [propRes, catRes] = await Promise.all([
+            const [propRes, catRes, accRes] = await Promise.all([
                 api.get('/backend/api/properties/index.php'),
-                api.get('/backend/api/categories/index.php')
+                api.get('/backend/api/categories/index.php'),
+                api.get('/backend/api/accounts/index.php')
             ]);
             if (propRes.data.success) setProperties(propRes.data.data);
             if (catRes.data.success) setCategories(catRes.data.data);
+            if (accRes.data.success) setAccounts(accRes.data.data);
         } catch (err) {
             console.error('Failed to fetch metadata', err);
         }
@@ -425,11 +458,68 @@ const TransactionList = () => {
             const { data } = await api.post('/backend/api/delete_transaction.php', { action: 'clear_all' });
             if (data.success) {
                 setTransactions([]);
+                setSelectedIds(new Set());
             } else {
                 alert(data.message || 'Clear failed');
             }
         } catch {
             alert('Clear failed due to network error');
+        }
+    };
+
+    const handleBulkUpdate = async (updates) => {
+        const ids = Array.from(selectedIds);
+        if (ids.length === 0) return;
+        
+        try {
+            const { data } = await api.post('/backend/api/transactions/bulk_update.php', {
+                ids,
+                data: updates
+            });
+            
+            if (data.success) {
+                setTransactions(prev => prev.map(t => 
+                    ids.includes(t.id) ? { ...t, ...updates } : t
+                ));
+                setSelectedIds(new Set());
+            } else {
+                alert(data.error || 'Bulk update failed');
+            }
+        } catch (err) {
+            alert('Bulk update failed due to network error');
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        const ids = Array.from(selectedIds);
+        if (ids.length === 0) return;
+        if (!confirm(`Are you sure you want to delete ${ids.length} transactions?`)) return;
+
+        try {
+            const { data } = await api.post('/backend/api/delete_transaction.php', { ids });
+            if (data.success) {
+                setTransactions(prev => prev.filter(t => !ids.includes(t.id)));
+                setSelectedIds(new Set());
+            } else {
+                alert(data.message || 'Bulk delete failed');
+            }
+        } catch {
+            alert('Bulk delete failed due to network error');
+        }
+    };
+
+    const toggleSelect = (id) => {
+        const next = new Set(selectedIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setSelectedIds(next);
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === processedTransactions.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(processedTransactions.map(t => t.id)));
         }
     };
 
@@ -452,9 +542,14 @@ const TransactionList = () => {
                 const amount = parseFloat(t.amount);
                 const txCategory = categories.find(c => c.id == t.category_id);
                 const isTransfer = t.category_type === 'transfer' || txCategory?.type === 'transfer';
+                const isCapital = t.category_type === 'capital' || txCategory?.type === 'capital';
+                const isIncome = (t.category_type === 'income' || txCategory?.type === 'income') || (amount > 0 && !isTransfer && !isCapital);
+                const isExpense = (t.category_type === 'expense' || txCategory?.type === 'expense') || (amount < 0 && !isTransfer && !isCapital);
+                
                 if (filterType === 'transfer') return isTransfer;
-                if (filterType === 'income') return amount > 0 && !isTransfer;
-                if (filterType === 'expense') return amount < 0 && !isTransfer;
+                if (filterType === 'capital') return isCapital;
+                if (filterType === 'income') return isIncome;
+                if (filterType === 'expense') return isExpense;
                 return true;
             });
         }
@@ -488,10 +583,18 @@ const TransactionList = () => {
         return data;
     }, [transactions, searchTerm, filterType, filterMatched, sortConfig]);
 
+    useEffect(() => {
+        if (globalPropertyFilter !== 'all') {
+            setFilterProperty(globalPropertyFilter);
+        } else {
+            setFilterProperty('all');
+        }
+    }, [globalPropertyFilter]);
+
     useEffect(() => { 
         fetchMetaData();
         fetchTransactions(); 
-    }, [filterProperty, filterCategory]);
+    }, [filterProperty, filterCategory, filterAccount]);
 
     const getSortIcon = (key) => {
         if (sortConfig.key !== key) return <span className="ml-1 text-slate-600">↕</span>;
@@ -500,8 +603,9 @@ const TransactionList = () => {
             : <span className="ml-1 text-indigo-400">↓</span>;
     };
 
-    const totalIncome  = processedTransactions.filter(t => parseFloat(t.amount) > 0 && t.category_type !== 'transfer').reduce((s, t) => s + parseFloat(t.amount), 0);
-    const totalExpense = processedTransactions.filter(t => parseFloat(t.amount) < 0 && t.category_type !== 'transfer').reduce((s, t) => s + parseFloat(t.amount), 0);
+    const totalIncome  = processedTransactions.filter(t => parseFloat(t.amount) > 0 && (t.category_type === 'income' || (!t.category_type && !categories.find(c => c.id == t.category_id))) ).reduce((s, t) => s + parseFloat(t.amount), 0);
+    const totalExpense = processedTransactions.filter(t => parseFloat(t.amount) < 0 && (t.category_type === 'expense' || (!t.category_type && !categories.find(c => c.id == t.category_id))) ).reduce((s, t) => s + parseFloat(t.amount), 0);
+    const totalCapital = processedTransactions.filter(t => (t.category_type === 'capital' || categories.find(c => c.id == t.category_id)?.type === 'capital')).reduce((s, t) => s + Math.abs(parseFloat(t.amount)), 0);
     const net          = totalIncome + totalExpense;
     const matchedCount = transactions.filter(t => t.receipt_id || t.receipt_path).length;
 
@@ -538,7 +642,7 @@ const TransactionList = () => {
                         {transactions.length > 0 && (
                             <button
                                 onClick={handleClearAll}
-                                className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-red-500/10 border border-red-200 dark:border-red-500/20 transition-colors"
+                                className="text-red-600 dark:red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-red-500/10 border border-red-200 dark:border-red-500/20 transition-colors"
                             >
                                 Clear All
                             </button>
@@ -547,7 +651,7 @@ const TransactionList = () => {
                 </div>
 
                 {/* Summary KPIs */}
-                <div className="grid grid-cols-3 gap-3 mb-5">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
                     <div className="bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20 rounded-xl px-4 py-3 shadow-sm">
                         <p className="text-xs text-green-600 dark:text-green-400 font-semibold mb-1 uppercase tracking-wider">Income</p>
                         <p className="text-green-700 dark:text-green-300 font-bold text-lg tabular-nums">${totalIncome.toFixed(2)}</p>
@@ -556,21 +660,35 @@ const TransactionList = () => {
                         <p className="text-xs text-red-600 dark:text-red-400 font-semibold mb-1 uppercase tracking-wider">Expenses</p>
                         <p className="text-red-700 dark:text-red-300 font-bold text-lg tabular-nums">${Math.abs(totalExpense).toFixed(2)}</p>
                     </div>
+                    <div className="bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 rounded-xl px-4 py-3 shadow-sm">
+                        <p className="text-xs text-purple-600 dark:text-purple-400 font-semibold mb-1 uppercase tracking-wider">Capital</p>
+                        <p className="text-purple-700 dark:text-purple-300 font-bold text-lg tabular-nums">${totalCapital.toFixed(2)}</p>
+                    </div>
                     <div className={`border rounded-xl px-4 py-3 shadow-sm ${net >= 0 ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-100 dark:border-indigo-500/20' : 'bg-orange-50 dark:bg-orange-500/10 border-orange-100 dark:border-orange-500/20'}`}>
-                        <p className={`text-xs font-semibold mb-1 uppercase tracking-wider ${net >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-orange-600 dark:text-orange-400'}`}>Net</p>
+                        <p className={`text-xs font-semibold mb-1 uppercase tracking-wider ${net >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-orange-600 dark:text-orange-400'}`}>Net P&L</p>
                         <p className={`font-bold text-lg tabular-nums ${net >= 0 ? 'text-indigo-700 dark:text-indigo-300' : 'text-orange-700 dark:text-orange-300'}`}>{net >= 0 ? '+' : ''}${net.toFixed(2)}</p>
                     </div>
                 </div>
 
                 {/* Filters row 1 */}
                 <div className="flex flex-wrap gap-3 mb-3">
-                    <input
-                        type="text"
-                        placeholder="Search description…"
-                        className="flex-1 min-w-[200px] px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <div className="flex-1 min-w-[200px] relative">
+                        <input
+                            type="text"
+                            placeholder="Search description…"
+                            className="w-full px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        {searchTerm && (
+                            <button
+                                onClick={() => setSearchTerm('')}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        )}
+                    </div>
                     
                     <select
                         className="px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
@@ -596,6 +714,17 @@ const TransactionList = () => {
 
                     <select
                         className="px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
+                        value={filterAccount}
+                        onChange={(e) => setFilterAccount(e.target.value)}
+                    >
+                        <option value="all">All Accounts</option>
+                        {accounts.map(a => (
+                            <option key={a.id} value={a.id}>{a.name}</option>
+                        ))}
+                    </select>
+
+                    <select
+                        className="px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm"
                         value={filterType}
                         onChange={(e) => setFilterType(e.target.value)}
                     >
@@ -603,6 +732,7 @@ const TransactionList = () => {
                         <option value="income">Income (+)</option>
                         <option value="expense">Expenses (-)</option>
                         <option value="transfer">Transfers</option>
+                        <option value="capital">Capital Improvements</option>
                     </select>
                 </div>
 
@@ -634,6 +764,14 @@ const TransactionList = () => {
                 <table className="min-w-full">
                     <thead className="bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 border-b border-slate-200 dark:border-white/5">
                         <tr>
+                            <th className="px-4 py-3 text-center w-10">
+                                <input 
+                                    type="checkbox" 
+                                    className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                    checked={processedTransactions.length > 0 && selectedIds.size === processedTransactions.length}
+                                    onChange={toggleSelectAll}
+                                />
+                            </th>
                             <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 select-none" onClick={() => requestSort('transaction_date')}>
                                 Date {getSortIcon('transaction_date')}
                             </th>
@@ -641,13 +779,16 @@ const TransactionList = () => {
                                 Description {getSortIcon('description')}
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider">
-                                Property
+                                Category
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider">
-                                Category
+                                Property
                             </th>
                             <th className="px-6 py-3 text-right text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 select-none" onClick={() => requestSort('amount')}>
                                 Amount {getSortIcon('amount')}
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider">
+                                Account
                             </th>
                             <th className="px-6 py-3 text-center text-xs font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider">
                                 Doc
@@ -657,7 +798,7 @@ const TransactionList = () => {
                     <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                         {processedTransactions.length === 0 ? (
                             <tr>
-                                <td colSpan="6" className="px-6 py-16 text-center text-slate-500 text-sm">
+                                <td colSpan="8" className="px-6 py-16 text-center text-slate-500 text-sm">
                                     {transactions.length === 0
                                         ? 'No transactions yet. Import a bank statement to get started.'
                                         : 'No transactions match your filter.'}
@@ -672,15 +813,30 @@ const TransactionList = () => {
                                 return (
                                     <tr
                                         key={tx.id}
-                                        className="hover:bg-slate-50/80 dark:hover:bg-white/3 transition-colors group cursor-pointer"
+                                        className={`hover:bg-slate-50/80 dark:hover:bg-white/3 transition-colors group cursor-pointer ${selectedIds.has(tx.id) ? 'bg-indigo-50/50 dark:bg-indigo-500/5' : ''}`}
                                         onClick={() => setSelectedTx(tx)}
                                     >
+                                        <td className="px-4 py-4 text-center" onClick={e => e.stopPropagation()}>
+                                            <input 
+                                                type="checkbox" 
+                                                className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                                checked={selectedIds.has(tx.id)}
+                                                onChange={() => toggleSelect(tx.id)}
+                                            />
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 font-mono">
                                             {tx.transaction_date}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 max-w-xs">
-                                            <span className="truncate block font-medium" title={tx.description}>{tx.description}</span>
+                                            <span className="truncate block" title={tx.description}>{tx.description}</span>
                                             {tx.notes && <span className="text-xs text-slate-400 dark:text-slate-500 italic truncate block">{tx.notes}</span>}
+                                        </td>
+                                        <td className="px-6 py-2 whitespace-nowrap align-middle">
+                                            <CascadingCategorySelect 
+                                                txCategory={txCategory} 
+                                                categories={categories}
+                                                onSelect={(categoryId) => handleUpdateTransaction(tx.id, { category_id: categoryId })}
+                                            />
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm" onClick={e => e.stopPropagation()}>
                                             <select 
@@ -694,16 +850,21 @@ const TransactionList = () => {
                                                 ))}
                                             </select>
                                         </td>
-                                        <td className="px-6 py-2 whitespace-nowrap align-middle">
-                                            <CascadingCategorySelect 
-                                                txCategory={txCategory} 
-                                                categories={categories}
-                                                onSelect={(categoryId) => handleUpdateTransaction(tx.id, { category_id: categoryId })}
-                                            />
-                                        </td>
-                                        <td className={`px-6 py-3.5 whitespace-nowrap text-sm text-right font-bold tabular-nums ${isTransfer ? 'text-slate-500 dark:text-slate-400' : amount < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                        <td className={`px-6 py-3.5 whitespace-nowrap text-sm text-right tabular-nums ${isTransfer ? 'text-slate-500 dark:text-slate-400' : amount < 0 ? '' : 'text-green-600'}`}>
                                             {amount < 0 ? '-' : '+'}${Math.abs(amount).toFixed(2)}
                                             {isTransfer && <span className="ml-1.5 text-[10px] font-normal inline-flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded px-1.5 py-0.5 opacity-80 title='Transfer'">🔁</span>}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm" onClick={e => e.stopPropagation()}>
+                                            <select 
+                                                className="bg-transparent border-none focus:ring-0 text-slate-600 dark:text-slate-400 text-xs cursor-pointer hover:text-indigo-500 max-w-[120px]"
+                                                value={tx.account_id || ''}
+                                                onChange={(e) => handleUpdateTransaction(tx.id, { account_id: e.target.value || null })}
+                                            >
+                                                <option value="">Unaccounted</option>
+                                                {accounts.map(a => (
+                                                    <option key={a.id} value={a.id}>{a.name}</option>
+                                                ))}
+                                            </select>
                                         </td>
                                         <td className="px-6 py-3.5 whitespace-nowrap text-center" onClick={e => e.stopPropagation()}>
                                             {hasDoc ? (
@@ -736,10 +897,96 @@ const TransactionList = () => {
                     transactions={transactions}
                     properties={properties}
                     categories={categories}
+                    accounts={accounts}
                     onClose={() => setSelectedTx(null)}
                     onUpdate={handleUpdateTransaction}
                     onDelete={handleDelete}
                 />
+            )}
+
+            {/* Bulk Action Bar */}
+            {selectedIds.size > 0 && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div className="bg-slate-900 dark:bg-slate-800 text-white rounded-2xl shadow-2xl border border-white/10 p-2 flex items-center gap-4 pr-4">
+                        <div className="bg-indigo-600 rounded-xl px-4 py-2 flex items-center gap-2">
+                            <span className="text-sm font-bold">{selectedIds.size}</span>
+                            <span className="text-xs font-semibold opacity-80 uppercase tracking-wider">Selected</span>
+                        </div>
+                        
+                        <div className="h-8 w-px bg-white/10 mx-1" />
+
+                        {/* Property Bulk Select */}
+                        <div className="relative group">
+                            <select 
+                                className="bg-transparent text-xs font-bold py-2 pl-2 pr-8 border-none focus:ring-0 cursor-pointer appearance-none hover:text-indigo-400 transition-colors"
+                                onChange={(e) => { if(e.target.value) handleBulkUpdate({ property_id: e.target.value }); e.target.value = ''; }}
+                                value=""
+                            >
+                                <option value="" disabled className="text-slate-900">Assign Property</option>
+                                <option value="" className="text-slate-900">Unassigned</option>
+                                {properties.map(p => <option key={p.id} value={p.id} className="text-slate-900">{p.name}</option>)}
+                            </select>
+                            <svg className="w-4 h-4 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+
+                        {/* Account Bulk Select */}
+                        <div className="relative group">
+                            <select 
+                                className="bg-transparent text-xs font-bold py-2 pl-2 pr-8 border-none focus:ring-0 cursor-pointer appearance-none hover:text-indigo-400 transition-colors"
+                                onChange={(e) => { if(e.target.value) handleBulkUpdate({ account_id: e.target.value }); e.target.value = ''; }}
+                                value=""
+                            >
+                                <option value="" disabled className="text-slate-900">Assign Account</option>
+                                <option value="" className="text-slate-900">Unaccounted</option>
+                                {accounts.map(a => <option key={a.id} value={a.id} className="text-slate-900">{a.name}</option>)}
+                            </select>
+                            <svg className="w-4 h-4 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+
+                        {/* Category Bulk Select - Simple for now, similar to others */}
+                        <div className="relative group">
+                            <select 
+                                className="bg-transparent text-xs font-bold py-2 pl-2 pr-8 border-none focus:ring-0 cursor-pointer appearance-none hover:text-indigo-400 transition-colors"
+                                onChange={(e) => { if(e.target.value) handleBulkUpdate({ category_id: e.target.value }); e.target.value = ''; }}
+                                value=""
+                            >
+                                <option value="" disabled className="text-slate-900">Set Category</option>
+                                {categories.filter(c => !c.parent_id).map(cat => (
+                                    <React.Fragment key={cat.id}>
+                                        <option value={cat.id} className="text-slate-900 font-bold">{cat.name}</option>
+                                        {categories.filter(sub => sub.parent_id == cat.id).map(sub => (
+                                            <option key={sub.id} value={sub.id} className="text-slate-900 pl-4">— {sub.name}</option>
+                                        ))}
+                                    </React.Fragment>
+                                ))}
+                            </select>
+                            <svg className="w-4 h-4 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+
+                        <div className="h-8 w-px bg-white/10 mx-1" />
+
+                        <button 
+                            onClick={() => handleBulkUpdate({ is_reviewed: 1 })}
+                            className="text-xs font-bold hover:text-indigo-400 transition-colors px-2 py-2"
+                        >
+                            Review All
+                        </button>
+
+                        <button 
+                            onClick={handleBulkDelete}
+                            className="text-xs font-bold text-red-400 hover:text-red-300 transition-colors px-2 py-2"
+                        >
+                            Delete Selected
+                        </button>
+
+                        <button 
+                            onClick={() => setSelectedIds(new Set())}
+                            className="text-xs font-bold text-slate-400 hover:text-white transition-colors ml-2"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );
