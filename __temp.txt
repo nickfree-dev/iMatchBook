@@ -1,24 +1,22 @@
-I am starting Phase 2 of the iMatchBook development: Core Bookkeeping Features. 
-Please implement the following architectural and database changes:
+The main work remaining falls under Phase 5: PWA & Polish, along with a few advanced AI features. Here is the list of remaining tasks:
 
-1. Database Migrations:
-   - Create a 'properties' table (id, user_id, name, address, type, is_active).
-   - Create a 'categories' table (id, user_id, name, type, schedule_e_line).
-   - Update 'bank_transactions' schema to include: user_id, property_id, category_id, receipt_id, notes, source, and is_reviewed.
-   - Update 'receipts' schema to include: user_id, property_id, category_id, doc_type, and notes.
+📱 Phase 5: PWA, Infrastructure & Settings (Remained)
+1. Infrastructure & Security
+ Configure PWA: Finalize vite-plugin-pwa settings (manifest, icons, and service worker strategy) to make the app installable and available offline.
+ Nginx Reverse Proxy: Add an Nginx service to docker-compose.yml to combine the frontend and backend on a single port (cleaning up the dual-port 5173/8000 setup).
+ Security Hardening: Move the Google service account JSON keys outside the web-accessible root and use environment variables for paths.
+2. Settings & Customization
+ Build /settings Page:
+Profile management (name, email, password).
+Categories Manager: Add, rename, or delete custom categories.
+Currency/Locales: Global settings for currency symbols and date formats.
+ Transaction CSV Export: While reports have export, adding a "bulk export" to the main Transactions ledger.
+3. Advanced AI & UI Polish
+ Auto-Categorization: Implement a backend service to suggest a category based on the merchant name (e.g., "Menards" automatically suggests "Repairs").
+ Fuzzy Matching: Improve the matching engine using Levenshtein distance for merchant names to catch matches even if the names aren't 100% identical.
+ Responsive Refinement: Detailed CSS polish for smaller mobile screens to ensure the dashboard and reports are perfectly usable on phones.
+Recommendation
+I recommend starting with Phase 5: PWA & Settings.
 
-2. Backend Model Layer:
-   - Create PHP Model classes in 'backend/models/' for Transaction, Document, Property, and Category to handle DB interactions cleanly.
-
-3. API Implementation:
-   - Build CRUD endpoints in 'backend/api/properties/' and 'backend/api/categories/'.
-   - Update 'api/transactions/' to support filtering by property_id and category_id.
-   - Create an 'api/transactions/update.php' endpoint to allow PATCH updates for assigning categories and properties to a specific transaction.
-
-4. Frontend Enhancements:
-   - Update the 'TransactionList' component to include inline dropdowns for assigning Categories and Properties.
-   - Add a "Linked Receipt" indicator (badge) to rows that have a 'receipt_id'.
-   - Implement a filter bar to search transactions by property or category.
-
-Ensure all new endpoints use the existing JWT auth middleware for security.
-
+PWA Support is a core goal that makes the app feel like a premium tool on mobile.
+Settings (Categories Manager) is practically necessary now that users can import data—they need a way to customize their bookkeeping.

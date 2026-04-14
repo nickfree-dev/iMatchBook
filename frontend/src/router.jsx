@@ -10,11 +10,13 @@ import ProtectedRoute  from './components/ProtectedRoute';
 import LoginPage       from './pages/LoginPage';
 
 // Lazy-load page components so each route is a separate code chunk
+const DashboardPage   = lazy(() => import('./pages/DashboardPage'));
 const TransactionList = lazy(() => import('./components/TransactionList'));
 const ImportPage      = lazy(() => import('./pages/ImportPage'));
 const CameraCapture   = lazy(() => import('./components/CameraCapture'));
 const PropertiesPage  = lazy(() => import('./pages/PropertiesPage'));
 const DocumentsPage   = lazy(() => import('./pages/DocumentsPage'));
+const ReportsPage     = lazy(() => import('./pages/ReportsPage'));
 
 // Simple loading fallback used by Suspense
 const PageLoader = () => (
@@ -37,9 +39,17 @@ const router = createBrowserRouter([
       {
         element: <AppLayout />,
         children: [
-          // Default redirect to /transactions
-          { index: true, element: <Navigate to="/transactions" replace /> },
+          // Default redirect to /dashboard
+          { index: true, element: <Navigate to="/dashboard" replace /> },
 
+          {
+            path: 'dashboard',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <DashboardPage />
+              </Suspense>
+            ),
+          },
           {
             path: 'transactions',
             element: (
@@ -80,13 +90,22 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'reports',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <ReportsPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],
   },
 
-  // Catch-all — redirect unknown paths to transactions
-  { path: '*', element: <Navigate to="/transactions" replace /> },
+  // Catch-all — redirect unknown paths to dashboard
+  { path: '*', element: <Navigate to="/dashboard" replace /> },
 ]);
 
 export default router;
+

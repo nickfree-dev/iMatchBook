@@ -9,6 +9,15 @@ import { useTheme } from '../context/ThemeContext';
 
 const navItems = [
   {
+    to: '/dashboard',
+    label: 'Dashboard',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z" />
+      </svg>
+    ),
+  },
+  {
     to: '/transactions',
     label: 'Transactions',
     icon: (
@@ -45,12 +54,18 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    to: '/reports',
+    label: 'Reports',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    ),
+  },
 ];
 
-const comingSoonItems = [
-  { label: 'Dashboard', icon: '📊' },
-  { label: 'Reports',   icon: '📈' },
-];
+const comingSoonItems = [];
 
 export default function AppLayout() {
   const { user, logout } = useAuth();
@@ -89,7 +104,7 @@ export default function AppLayout() {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-600 uppercase tracking-wider px-3 mb-2">Active</p>
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-600 uppercase tracking-wider px-3 mb-2">Navigation</p>
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -101,20 +116,6 @@ export default function AppLayout() {
               {item.label}
             </NavLink>
           ))}
-
-          <div className="pt-4">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-600 uppercase tracking-wider px-3 mb-2">Coming Soon</p>
-            {comingSoonItems.map((item) => (
-              <div
-                key={item.label}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 dark:text-slate-600 cursor-not-allowed select-none"
-              >
-                <span className="text-base">{item.icon}</span>
-                {item.label}
-                <span className="ml-auto text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded-md">Soon</span>
-              </div>
-            ))}
-          </div>
         </nav>
 
         {/* User / Settings / Logout */}
