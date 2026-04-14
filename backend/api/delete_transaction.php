@@ -40,6 +40,17 @@ try {
         } else {
             $response['message'] = 'Failed to clear transactions.';
         }
+    } elseif (isset($data['ids']) && is_array($data['ids']) && !empty($data['ids'])) {
+        // Bulk Delete
+        $placeholders = str_repeat('?,', count($data['ids']) - 1) . '?';
+        $query = "DELETE FROM bank_transactions WHERE id IN ($placeholders)";
+        $stmt = $db->prepare($query);
+        if ($stmt->execute($data['ids'])) {
+            $response['success'] = true;
+            $response['message'] = count($data['ids']) . ' transactions deleted.';
+        } else {
+            $response['message'] = 'Failed to bulk delete transactions.';
+        }
     } elseif (isset($data['id'])) {
         $query = "DELETE FROM bank_transactions WHERE id = :id";
         $stmt = $db->prepare($query);

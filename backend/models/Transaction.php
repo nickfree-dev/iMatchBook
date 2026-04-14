@@ -22,14 +22,25 @@ class Transaction {
         
         $params = [':user_id' => $userId];
 
-        if (!empty($filters['property_id'])) {
+        if ($filters['property_id'] === 'none') {
+            $sql .= " AND t.property_id IS NULL";
+        } elseif (!empty($filters['property_id']) && $filters['property_id'] !== 'all') {
             $sql .= " AND t.property_id = :property_id";
             $params[':property_id'] = $filters['property_id'];
         }
 
-        if (!empty($filters['category_id'])) {
+        if ($filters['category_id'] === 'none') {
+            $sql .= " AND t.category_id IS NULL";
+        } elseif (!empty($filters['category_id']) && $filters['category_id'] !== 'all') {
             $sql .= " AND t.category_id = :category_id";
             $params[':category_id'] = $filters['category_id'];
+        }
+
+        if (isset($filters['account_id']) && $filters['account_id'] === 'none') {
+            $sql .= " AND t.account_id IS NULL";
+        } elseif (!empty($filters['account_id']) && $filters['account_id'] !== 'all') {
+            $sql .= " AND t.account_id = :account_id";
+            $params[':account_id'] = $filters['account_id'];
         }
 
         if (!empty($filters['is_reviewed'])) {

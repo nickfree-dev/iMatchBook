@@ -17,6 +17,7 @@ $transactionModel = new Transaction($db);
 $filters = [
     'property_id' => $_GET['property_id'] ?? null,
     'category_id' => $_GET['category_id'] ?? null,
+    'account_id'  => $_GET['account_id'] ?? null,
     'is_reviewed' => isset($_GET['is_reviewed']) ? (int)$_GET['is_reviewed'] : null,
     'date_from'   => $_GET['date_from'] ?? null,
     'date_to'     => $_GET['date_to'] ?? null,
